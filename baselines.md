@@ -81,7 +81,8 @@ Report std/mean for every measurement. CLEAR's bar is std/mean ≤ 9.5% for meas
   gpu_name, gpu_uuid, driver, cuda, torch, transformers, zeus versions,
   power_limit_W, idle_power_W, model_id, model_revision, dtype, attn_impl,
   dataset, split, example_ids, thinking (on|off), input_len, output_len,
-  hit_token_cap, decoding params, seed, method (clear|nvml|zeus), N, T,
+  hit_token_cap, think_end_pos, natural_len, trace_path,
+  decoding params, seed, method (clear|nvml|zeus), N, T,
   trials_mJ[], mean_mJ, std_mJ, checkpoints [{k, E_mJ}], accuracy fields }
 ```
 
@@ -187,6 +188,16 @@ Qwen3-8B in BF16 needs ~16 GB of weights plus KV cache, so ≥ 24 GB is needed f
 - the **on/off ratio** of energy per query
 
 Sanity check: Jin et al. report a 3.7–113× ratio and Oviedo et al. about 13×. A ratio outside that range is something to investigate first, not a finding.
+
+**Saved for later experiments (no extra GPU time):**
+- **Traces.** For every `(problem, mode, trial)`, save the generated token IDs, the seed, and `think_end_pos` (the position of `</think>`), at `trace_path`.
+  - Sampled traces can't be regenerated exactly, even with the same seed.
+  - Experiment C truncates these exact traces, so the energy and the accuracy at each budget come from the same trace.
+  - The later CLEAR-on-Qwen3 component work rebuilds KV caches at position t from them.
+- **Natural length.** `natural_len` is the number of thinking tokens before `</think>`, recorded **per trial**. Trials of the same problem differ in length, so C's percentage budgets are defined per trial.
+- **Capped runs.** A run that hits the 8,192-token cap has `natural_len = null`: the true length is unknown, so a percentage budget is undefined.
+  - These runs are reported in B2b, with the capped fraction shown next to the averages, since their J/query understates the true cost.
+  - They are left out of C's budget curves.
 
 ---
 

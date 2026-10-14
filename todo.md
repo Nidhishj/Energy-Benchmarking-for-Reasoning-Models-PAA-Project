@@ -70,6 +70,14 @@ Each task lists who leads it, what it depends on, and what "done" means.
 ### B2b + B3-long — MATH500 (§3, §4)
 - [ ] **Generation runner:** loads `math500_ids.json`, generates with thinking on or off, and wraps each generation in `window_measure` plus `NvmlCheckpoint`. **Lead: N.**
   - Per run, records: output tokens (thinking and answer counted separately), whether the token cap was hit, and the checkpoint `(k, E)` list.
+- [ ] **Save each trace (needed for Experiments A and C).** **Lead: N.**
+  - Store the generated token IDs, the seed, and the `</think>` token position for every `(problem, mode, trial)`, in `results/traces/` (`.npy` or JSONL).
+  - Why: sampled traces can't be regenerated exactly. C truncates *these* traces, and the later CLEAR-on-Qwen3 work rebuilds KV caches from them.
+  - Done when: decoding the saved IDs reproduces the logged output text exactly.
+- [ ] **Natural length per trial.** **Lead: N.**
+  - Record `natural_len` = number of thinking tokens before `</think>`, separately for each trial.
+  - If a run hits the 8,192 cap without `</think>`, set `natural_len = null` and `hit_token_cap = true`.
+  - Done when: B2b reports the fraction of capped runs per mode next to the averages, and capped runs are flagged to be left out of C's budget curves.
 - [ ] **Grading** with `math-verify`, recording its version. **Lead: N.**
   - Extract the answer after `</think>` (thinking on) or from the whole output (thinking off).
   - Count an unparseable answer as wrong and report how many there were.
