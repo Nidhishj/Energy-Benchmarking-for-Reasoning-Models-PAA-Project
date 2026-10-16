@@ -1,0 +1,31 @@
+# Pinned dependencies for the project (Python 3.11).
+#
+# Setup:
+#   conda create -p <path>/envs/energy python=3.11 -y
+#   conda activate <path>/envs/energy
+#   pip install -r requirements.txt
+#
+# torch is the CUDA 12.4 build. It needs an NVIDIA driver >= 550; the default PyPI wheel (CUDA 13) does not
+# work with the medserver's driver (560). Other pins match the env tested on 2026-10-16
+# (RTX 6000 Ada, driver 560.35.03).
+
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.6.0+cu124
+
+# Models and data
+transformers==4.57.1
+tokenizers==0.22.2
+safetensors==0.8.0
+huggingface_hub[cli]==0.36.2
+datasets==5.0.1
+
+# Energy measurement
+nvidia-ml-py==13.615.71    # provides `import pynvml`; do not also install nvidia-ml-py3 (CLEAR's old binding)
+zeus==0.16.0
+
+# Grading
+math-verify[antlr4_13_2]==0.9.0
+
+# Utilities
+numpy==2.4.6
+tqdm==4.70.1

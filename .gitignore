@@ -1,0 +1,40 @@
+# Personal Claude Code notes (each teammate can keep their own)
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments and caches
+.venv/
+venv/
+envs/
+hf_cache/
+.cache/
+
+# Model weights: keep the folder, ignore its contents
+models/*
+!models/README.md
+
+# Tensors and checkpoints, anywhere in the repo
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+*.npy
+
+# Large run outputs (summaries and figures stay tracked)
+results/traces/
+
+# Logs
+*.log
+slurm-*.out
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
