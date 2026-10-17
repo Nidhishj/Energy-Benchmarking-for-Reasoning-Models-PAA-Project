@@ -117,7 +117,7 @@ def main():
     with torch.inference_mode():
         for mode in a.modes:
             ids = qwen.prompt_ids(tok, problems[0]["problem"], mode, a.device)
-            model.generate(ids, **qwen.generation_kwargs(tok, mode, 32))
+            model.generate(ids, attention_mask=torch.ones_like(ids), **qwen.generation_kwargs(tok, mode, 32))
     meter.sync()
 
     durations = {"on": [], "off": []}
@@ -143,7 +143,8 @@ def main():
                     ckpt = EnergyCheckpoints(meter, prompt_len, ks)
                     others = meter.other_processes()
                     with torch.inference_mode(), window.measure() as w:
-                        out = model.generate(ids, **qwen.generation_kwargs(tok, mode, max_new[mode]),
+                        out = model.generate(ids, attention_mask=torch.ones_like(ids),
+                                             **qwen.generation_kwargs(tok, mode, max_new[mode]),
                                              stopping_criteria=StoppingCriteriaList([ckpt]))
                     out_ids = out[0, prompt_len:].tolist()
                     split = qwen.split_output(tok, out_ids, mode, max_new[mode])

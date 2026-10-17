@@ -93,7 +93,8 @@ def main():
                     todo = [t for t in range(a.T) if (prob["problem_id"], mode, k, t) not in done]
                     if not todo:
                         continue
-                    kw = {**qwen.generation_kwargs(tok, mode, k), "min_new_tokens": k}
+                    kw = {**qwen.generation_kwargs(tok, mode, k), "min_new_tokens": k,
+                          "attention_mask": torch.ones_like(ids)}
 
                     def fn():
                         return model.generate(ids, **kw)
