@@ -22,7 +22,10 @@ if ! command -v uv >/dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 [ -x "$ENV/bin/python" ] || uv venv --python 3.11 "$ENV"
+# Long timeout: pypi.nvidia.com sometimes takes minutes to start sending large wheels (cuDNN).
+export UV_HTTP_TIMEOUT=600 UV_HTTP_RETRIES=10
 VIRTUAL_ENV=$ENV uv pip install -r "$REPO/requirements-cu128.txt"
+VIRTUAL_ENV=$ENV uv pip install -r "$REPO/requirements-common.txt"
 
 echo "== Checks"
 cd "$REPO"

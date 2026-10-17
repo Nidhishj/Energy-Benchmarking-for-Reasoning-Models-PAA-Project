@@ -1,8 +1,8 @@
 """B2a: whole-model energy of BERT-base fine-tuned on MRPC, no thinking (baselines.md section 3).
 
 Two measurements of the same model:
-  1. Dataset pass: all 408 GLUE MRPC validation pairs at batch 1 in one window, read with raw NVML and Zeus at
-     once (method "nvml"). Energy per example = window energy / 408. T trials. This is how dataset-level
+  1. Dataset pass: all 408 GLUE MRPC validation pairs at batch 1, --passes-per-window times in one window, read
+     with raw NVML and Zeus at once (method "nvml"). Energy per example = window energy / (408 x passes). T trials. This is how dataset-level
      benchmarks such as AI Energy Score report energy.
   2. Per example: CLEAR's amplification (method "clear") on 5 examples at the 0/25/50/75/100% points of the
      token-length distribution, N calls per trial, T trials.
@@ -38,6 +38,9 @@ def parse_args():
     p.add_argument("--T", type=int, default=10)
     p.add_argument("--N", type=int, default=1000, help="CLEAR repetitions per trial, per-example measurement")
     p.add_argument("--n-examples", type=int, default=5)
+    p.add_argument("--passes-per-window", type=int, default=5,
+                   help="dataset passes per energy window; one pass is ~0.65 s on an RTX PRO 5000, below the "
+                        ">= 1 s needed for the energy counter to resolve it")
     p.add_argument("--pause-s", type=float, default=0.5)
     p.add_argument("--no-zeus", action="store_true")
     p.add_argument("--idle-s", type=float, default=30.0)
@@ -91,7 +94,8 @@ def main():
 
     config = {"dataset": "nyu-mll/glue mrpc validation", "n_pairs": len(encs), "T": a.T, "N": a.N,
               "per_example_idx": picks, "dtype": a.dtype, "attn_impl": a.attn, "batch_size": 1, "padding": False,
-              "zeus": window.zeus is not None, "pause_s": a.pause_s}
+              "zeus": window.zeus is not None, "pause_s": a.pause_s,
+              "passes_per_window": a.passes_per_window}
     model_info = {"id": a.model_id, "local_path": a.model, "revision": getattr(model.config, "_commit_hash", None),
                   "class": type(model).__name__, "dtype": a.dtype, "attn_impl": model.config._attn_implementation,
                   "n_layers": model.config.num_hidden_layers}
@@ -112,11 +116,14 @@ def main():
             time.sleep(a.pause_s)
             others = meter.other_processes()
             with torch.inference_mode(), window.measure() as w:
-                dataset_pass()
+                for _ in range(a.passes_per_window):
+                    dataset_pass()
             rec.write({"experiment": experiment, "kind": "dataset_pass", "method": "nvml", "example_idx": -1,
-                       "trial": trial, "n_examples": len(encs), **w, **meter.state(), "other_processes": others})
-            e = (w["E_end_mJ"] - w["E_start_mJ"]) / len(encs)
-            z = f", zeus {w['zeus_mJ'] / len(encs):.2f}" if "zeus_mJ" in w else ""
+                       "trial": trial, "n_examples": len(encs) * a.passes_per_window,
+                       "passes": a.passes_per_window, **w, **meter.state(), "other_processes": others})
+            n = len(encs) * a.passes_per_window
+            e = (w["E_end_mJ"] - w["E_start_mJ"]) / n
+            z = f", zeus {w['zeus_mJ'] / n:.2f}" if "zeus_mJ" in w else ""
             print(f"dataset pass t{trial}: {e:.2f} mJ/example (nvml{z}), {w['t_end_s'] - w['t_start_s']:.2f} s",
                   flush=True)
 

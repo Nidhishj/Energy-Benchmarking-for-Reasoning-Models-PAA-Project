@@ -1,7 +1,7 @@
 # Slot server: NVIDIA RTX PRO 5000 (Blackwell, sm_120). Blackwell needs a CUDA >= 12.8 build of torch
 # (torch >= 2.7) and an NVIDIA driver >= 570; the cu124 build in requirements.txt has no sm_120 kernels.
-# torch 2.8.0 on plain PyPI (Linux x86_64) is the CUDA 12.8 build, and its nvidia-* dependencies also come from PyPI.
-# (The download.pytorch.org index sends them to pypi.nvidia.com, which times out from the slot server.)
-torch==2.8.0
-
--r requirements-common.txt
+# Install in two steps (scripts/slot_setup.sh does this): torch from the PyTorch index, then the rest from PyPI.
+# From the slot server, files.pythonhosted.org is very slow (~80 KB/s) but download.pytorch.org and
+# pypi.nvidia.com (where the PyTorch index sends the nvidia-* wheels) are fast, if occasionally slow to answer.
+--index-url https://download.pytorch.org/whl/cu128
+torch==2.8.0+cu128

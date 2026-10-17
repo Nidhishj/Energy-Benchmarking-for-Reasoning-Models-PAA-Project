@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "run_id": "20261017-192358_B2b_speedcheck_gpu0_ebf025db",
+  "session_id": "20261017-192358_server_gpu0",
+  "experiment": "B2b_speedcheck",
+  "git_commit": "9d0ac59",
+  "git_dirty": false,
+  "command": "/data/cs3406/team02/envs/energy/bin/python b2/run_b2b.py --modes on --T-on 1 --limit 3 --tag speedcheck --idle-s 10 --stop-at 19:46",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "dataset": "HuggingFaceH4/MATH-500 (test split)",
+    "subset_selection": "6 per level (1-5), random.Random(0).sample over problems sorted by unique_id",
+    "problem_ids": [
+      "test/intermediate_algebra/1714.json",
+      "test/intermediate_algebra/431.json",
+      "test/algebra/1214.json"
+    ],
+    "modes": [
+      "on"
+    ],
+    "T": {
+      "on": 1,
+      "off": 3
+    },
+    "max_new_tokens": {
+      "on": 8192,
+      "off": 2048
+    },
+    "decoding": {
+      "on": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20
+      }
+    },
+    "instruction": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "zeus": true,
+    "checkpoints": "1,2,4,...,512 then every 512",
+    "grader": "math-verify",
+    "order": "mode, then trial, then problem"
+  },
+  "config_hash": "ebf025db",
+  "status": "complete",
+  "started": "20261017-192358",
+  "finished": "20261017-192519"
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "session_id": "20261017-193728_server_gpu0",
+  "host": "server",
+  "gpu_name": "NVIDIA RTX PRO 5000 Blackwell",
+  "gpu_uuid": "GPU-67b11b63-538f-9e6a-ce9b-6ebf327428f0",
+  "nvml_index": 0,
+  "cuda_visible_devices": "0",
+  "driver": "595.84",
+  "power_limit_W": 300.0,
+  "memory_total_MiB": 48935,
+  "idle": {
+    "duration_s": 10.002132415771484,
+    "E_start_mJ": 13877572370,
+    "E_end_mJ": 13878190879,
+    "mean_W": 61.837713628418626,
+    "temp_C": 65,
+    "sm_clock_MHz": 2370,
+    "mem_clock_MHz": 13365,
+    "power_W": 60.271
+  },
+  "other_processes_at_start": [],
+  "versions": {
+    "python": "3.11.17",
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.1",
+    "nvidia-ml-py": "13.615.71",
+    "zeus": "0.16.0",
+    "datasets": "5.0.1",
+    "math-verify": "0.9.0"
+  }
+}
