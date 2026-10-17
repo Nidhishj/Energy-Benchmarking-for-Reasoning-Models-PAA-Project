@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "session_id": "20261017-024718_server_gpu0",
+  "host": "server",
+  "gpu_name": "NVIDIA RTX 6000 Ada Generation",
+  "gpu_uuid": "GPU-66e0575b-9f2d-3533-a1aa-a5e213ab3888",
+  "nvml_index": 0,
+  "cuda_visible_devices": "0",
+  "driver": "560.35.03",
+  "power_limit_W": 300.0,
+  "memory_total_MiB": 49140,
+  "idle": {
+    "duration_s": 30.002044916152954,
+    "E_start_mJ": 852037154184,
+    "E_end_mJ": 852038593787,
+    "mean_W": 47.98349592580354,
+    "temp_C": 46,
+    "sm_clock_MHz": 210,
+    "mem_clock_MHz": 405,
+    "power_W": 27.399
+  },
+  "other_processes_at_start": [],
+  "versions": {
+    "python": "3.11.17",
+    "torch": "2.6.0+cu124",
+    "transformers": "4.57.1",
+    "nvidia-ml-py": "13.615.71",
+    "zeus": "0.16.0",
+    "datasets": "5.0.1",
+    "math-verify": "0.9.0"
+  }
+}
