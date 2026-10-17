@@ -22,8 +22,7 @@ if ! command -v uv >/dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 [ -x "$ENV/bin/python" ] || uv venv --python 3.11 "$ENV"
-# unsafe-best-match: the torch index also hosts tqdm/numpy etc. at other versions; take pins from PyPI too.
-VIRTUAL_ENV=$ENV uv pip install --index-strategy unsafe-best-match -r "$REPO/requirements-cu128.txt"
+VIRTUAL_ENV=$ENV uv pip install -r "$REPO/requirements-cu128.txt"
 
 echo "== Checks"
 cd "$REPO"
