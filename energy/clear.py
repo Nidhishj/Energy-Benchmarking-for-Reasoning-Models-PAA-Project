@@ -25,7 +25,7 @@ def clear_measure(
     with torch.inference_mode():
         for _ in range(warmup_calls):
             fn()
-        torch.cuda.synchronize(meter.torch_device)
+        meter.sync()
 
         for trial in range(T):
             time.sleep(pause_s)

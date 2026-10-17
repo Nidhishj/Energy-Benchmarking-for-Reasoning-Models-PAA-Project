@@ -22,10 +22,13 @@ class GpuMeter:
         self.nvml_index = pynvml.nvmlDeviceGetIndex(self.handle)
         self.name = pynvml.nvmlDeviceGetName(self.handle)
 
+    def sync(self):
+        torch.cuda.synchronize(self.torch_device)
+
     def read(self, sync: bool = True) -> tuple[int, float]:
         """Return (total energy since boot in mJ, wall time in s). Syncs the GPU first so queued work is counted."""
         if sync:
-            torch.cuda.synchronize(self.torch_device)
+            self.sync()
         return pynvml.nvmlDeviceGetTotalEnergyConsumption(self.handle), time.time()
 
     def state(self) -> dict:

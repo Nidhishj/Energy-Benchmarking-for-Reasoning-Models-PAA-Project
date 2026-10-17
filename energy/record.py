@@ -17,7 +17,8 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-RESULTS = REPO / "results"
+# ENERGY_RESULTS_DIR redirects output, e.g. for dry runs that must not land in results/.
+RESULTS = Path(os.environ.get("ENERGY_RESULTS_DIR", REPO / "results"))
 SCHEMA_VERSION = 1
 
 
