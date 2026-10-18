@@ -17,15 +17,14 @@ Logging out or a dropped connection kills every program; stop GPU work 15 min be
 Already in place on the server (no setup needed): env `~/envs/energy` (torch 2.8.0+cu128), all models in
 `Energy-Benchmarking-for-Reasoning-Models-PAA-Project/models/`, uv in `~/.local/bin`.
 
-## Before the slot (no GPU)
+## Before the slot (no GPU) — done 2026-10-18
 
-- [ ] **B2b analysis: add a per-token spread column** (std/mean of mJ/token across trials of a problem). Slot 1
-      showed 7.5% spread in J/query, almost all from sampled answers differing in length; J/token varies ~1%.
-      The 5% rule in baselines.md should be checked on J/token, with J/query spread reported alongside.
-- [ ] **B1 debug script** `b1/debug_capture.py` (see "B1 capture debugging" below), dry-run on CPU with the fake
-      meter so the slot only spends GPU time on measuring.
-- [ ] Optional: `--trials` option for `b2/run_b2b.py` (run only the listed trial indices into a new run dir), so a
-      third thinking-on trial can be added without changing the resumed run's config.
+- [x] **B2b analysis: per-token spread column.** On slot 1's thinking-off rows: J/query spread 7.5% (answer lengths
+      differ between sampled trials), **mJ/token spread 0.6% (max 2.5%)**, so the 5% check passes on mJ/token.
+- [x] **`b1/debug_capture.py`** for the B1 capture debugging (below). Dry-run on CPU with the fake meter.
+- [x] **`--trials` for `b2/run_b2b.py`**: runs only the listed trial indices into a new run dir. It is only added to
+      the config when used, so yesterday's run still resumes: checked by resuming a copy of it with today's code
+      (same config hash once the dry run's Zeus-off flag is accounted for).
 
 ## Slot timeline
 
@@ -37,7 +36,7 @@ Already in place on the server (no setup needed): env `~/envs/energy` (torch 2.8
 | T+1:05 | **Reproducibility reruns** (baselines.md 1.5) | 15 min | Each matches slot 1 within the reported std |
 | T+1:20 | **Checkpoint overhead**: same problem and seed, with and without checkpoints | 5 min | Energy difference < 1% |
 | T+1:25 | **B1 capture debugging** | 60–75 min | Find which hypothesis explains the ~18% gap |
-| T+2:40 | Optional: third thinking-on trial (needs `--trials`), or more B1 debugging | ≤ 50 min | Stop by T+3:30 |
+| T+2:40 | Optional: third thinking-on trial (below), or more B1 debugging | ≤ 50 min | Stop by T+3:30 |
 | T+3:30 | **Analyses, copy results to the Mac, commit and push** | 15 min | Everything on GitHub before T+3:45 |
 
 ### Sync code (T+0:00)
@@ -127,8 +126,31 @@ the rest is **power** (a block replayed on its own draws ~13% less power than in
    forward pass. *Test:* compare `sm_clock_MHz` and `power_W` logged per trial (already in the rows) between block
    and full-model trials; optionally lock clocks if permitted (`nvidia-smi -lgc`, needs root, probably not).
 
-Start with 1 (biggest expected effect, cheapest to test), then 2 from the profiler. Record the result in the B1
+All three are measured by one script (~6 min for two lengths; `--each-layer` adds ~3 min per length and checks that
+layer 5 is representative):
+
+```bash
+python -u b1/debug_capture.py --seq-lens 32 128 2>&1 | tee ~/b1_debug.log
+```
+
+It prints a profile of one forward pass (kernel count, GPU-busy share of wall time), one line per part
+(mJ, std/mean, average W, SM clock range), and a summary per length:
+- `B1 captured`: B1's definition, should reproduce slot 1's ~80%.
+- `H1 cycled`: the same sum with the 12 layers run in sequence. Close to 100% → cache residency explains the gap.
+- `H1 flushed`: one layer with the L2 cache flushed before each call, flush energy subtracted. Above `layer_alone`
+  → the cached replay underestimates.
+- `H2 glue`: `encoder / layers_cycled` and `(backbone + head) / full_model`. Well above 1 → work between layers.
+
+Start with H1 (biggest expected effect, cheapest to test), then H2 from the profile. Record the result in the B1
 table notes either way: CLEAR's own released code replays a single layer, so this is also a finding about CLEAR.
+
+## Optional third thinking-on trial (T+2:40)
+
+```bash
+python -u b2/run_b2b.py --modes on --T-on 3 --trials 2 --tag extra --stop-at <HH:MM>
+```
+
+New run dir; give it to the analysis together with the main run. ~30 gens × ~40 s ≈ 20 min.
 
 ## Analyses and push (T+3:30)
 

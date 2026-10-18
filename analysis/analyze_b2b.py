@@ -29,8 +29,9 @@ def main():
     for gpu, g in rows.groupby("gpu"):
         md += [f"## {gpu}", "",
                "| Mode | Rows | Problems | Accuracy | Output tok | Thinking tok | Answer tok | J/query | "
-               "J/query idle-sub | mJ/token | J/correct | Token cap hit | Trial spread | Zeus vs NVML |",
-               "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+               "J/query idle-sub | mJ/token | J/correct | Token cap hit | Trial spread J/query | Trial spread mJ/token | "
+               "Zeus vs NVML |",
+               "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
         per_mode = {}
         for mode in ["off", "on"]:
             m = g[g["mode"] == mode]
@@ -39,6 +40,8 @@ def main():
             n_correct = int(m.correct.sum())
             spread = m.groupby("problem_id").E_J.agg(lambda s: s.std(ddof=0) / s.mean() if len(s) > 1 else None)
             spread = spread.dropna()
+            spread_tok = m.groupby("problem_id").mJ_per_tok.agg(
+                lambda s: s.std(ddof=0) / s.mean() if len(s) > 1 else None).dropna()
             zeus = ""
             if "zeus_mJ" in m and m.zeus_mJ.notna().any():
                 gap = 100 * (m.zeus_mJ / 1000 / m.E_J - 1)
@@ -48,7 +51,9 @@ def main():
                 f"{m.output_len.mean():.0f} | {m.thinking_tokens.mean():.0f} | {m.answer_tokens.mean():.0f} | "
                 f"{m.E_J.mean():.1f} | {m.E_idle_sub_J.mean():.1f} | {m.mJ_per_tok.mean():.1f} | "
                 f"{m.E_J.sum() / n_correct if n_correct else float('nan'):.1f} | {100 * m.hit_token_cap.mean():.1f}% | "
-                f"{'' if spread.empty else f'{100 * spread.mean():.1f}% (max {100 * spread.max():.1f}%)'} | {zeus} |")
+                f"{'' if spread.empty else f'{100 * spread.mean():.1f}% (max {100 * spread.max():.1f}%)'} | "
+                f"{'' if spread_tok.empty else f'{100 * spread_tok.mean():.1f}% (max {100 * spread_tok.max():.1f}%)'} | "
+                f"{zeus} |")
             per_mode[mode] = m.groupby("problem_id").E_J.mean()
         if {"on", "off"} <= set(per_mode):
             ratio = (per_mode["on"] / per_mode["off"]).dropna()
@@ -62,7 +67,8 @@ def main():
         for r in by_level.itertuples():
             md.append(f"| {r.mode} | {r.level} | {100 * r.acc:.0f}% | {r.E_J:.1f} | {r.tok:.0f} |")
         md.append("")
-    md += ["Trial spread = std/mean of energy across trials of the same problem (baselines.md: add trials if > 5%).",
+    md += ["Trial spread = std/mean across trials of the same problem. Sampled answers differ in length between trials,",
+           "so J/query spread mostly reflects length; the 5% check (baselines.md) applies to mJ/token.",
            "Token-capped runs are included in the averages; their J/query understates the true cost."]
     write_md(RESULTS / "tables" / f"{a.out}.md", md)
 

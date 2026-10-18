@@ -45,6 +45,9 @@ def parse_args():
     p.add_argument("--T-off", type=int, default=3, help="trials per problem, thinking off")
     p.add_argument("--max-new-on", type=int, default=qwen.MAX_NEW_TOKENS["on"])
     p.add_argument("--max-new-off", type=int, default=qwen.MAX_NEW_TOKENS["off"])
+    p.add_argument("--trials", type=int, nargs="+",
+                   help="run only these trial indices (e.g. --T-on 3 --trials 2 --tag extra adds a third trial "
+                        "in a new run dir; seeds depend on the trial index, so it differs from trials 0-1)")
     p.add_argument("--limit", type=int, help="only the first n problems of the subset (speed check, dry runs)")
     p.add_argument("--problems", nargs="+", help="only these problem_ids")
     p.add_argument("--no-zeus", action="store_true", help="skip the Zeus cross-check")
@@ -106,6 +109,8 @@ def main():
         "checkpoints": None if a.no_checkpoints else "1,2,4,...,512 then every 512",
         "grader": "math-verify", "order": "mode, then trial, then problem",
     }
+    if a.trials:
+        config["trials"] = a.trials
     experiment = "B2b" + (f"_{a.tag}" if a.tag else "")
     rec = Recorder(experiment, config, qwen.model_info(model, a.model_id, a.model, a.dtype), meter, idle,
                    resume_dir=a.resume)
@@ -124,7 +129,7 @@ def main():
     status = "failed"
     try:
         for mode in a.modes:
-            for trial in range(T[mode]):
+            for trial in (a.trials or range(T[mode])):
                 for prob in problems:
                     key = (prob["problem_id"], mode, trial)
                     if key in done:
