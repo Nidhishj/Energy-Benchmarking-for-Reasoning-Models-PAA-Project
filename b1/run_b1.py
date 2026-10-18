@@ -25,7 +25,7 @@ from energy import GpuMeter, Recorder, clear_measure  # noqa: E402
 
 DTYPES = {"fp16": torch.float16, "fp32": torch.float32, "bf16": torch.bfloat16}
 COMPONENTS = ["embedding", "attention", "attention_self", "ffn_intermediate", "ffn_output", "norm_all", "block",
-              "cls_head", "full_model"]
+              "layers_cycled", "cls_head", "full_model"]
 
 
 def parse_args():
@@ -88,6 +88,7 @@ def capture_inputs(model, inputs, layer_idx: int) -> dict:
         "ln_output": layer.output.LayerNorm,
         "cls_head": model.cls,
     }
+    targets |= {f"layer{i}": l for i, l in enumerate(model.bert.encoder.layer)}  # for layers_cycled
     store, handles = {}, []
     for name, module in targets.items():
         def hook(mod, args, kwargs, name=name):
@@ -111,6 +112,7 @@ def make_fns(model, inputs, cache) -> dict:
         return lambda: mods[name](*args, **kwargs)
 
     ln_a, ln_o = call("ln_attention"), call("ln_output")
+    layer_calls = [call(f"layer{i}") for i in range(len(model.bert.encoder.layer))]
     return {
         "embedding": call("embedding"),
         "attention": call("attention"),            # self-attn + out-proj + residual + LayerNorm (as CLEAR's code)
@@ -119,6 +121,9 @@ def make_fns(model, inputs, cache) -> dict:
         "ffn_output": call("ffn_output"),          # dense + residual + LayerNorm (as CLEAR's code)
         "norm_all": lambda: (ln_a(), ln_o()),      # both LayerNorms of the layer (not in CLEAR's released code)
         "block": call("block"),
+        # All layers in sequence, each with its own captured input. Replaying one layer N times keeps its weights
+        # in L2 and underestimates it by 5-9% (slot 2, b1/debug_capture.py); this is the B1 encoder measurement.
+        "layers_cycled": lambda: [f() for f in layer_calls],
         "cls_head": call("cls_head"),
         "full_model": lambda: model(**inputs),
     }
@@ -164,7 +169,7 @@ def main():
             inputs = build_inputs(tok, a.prompt, a.repeat, L)
             fns = make_fns(model, inputs, capture_inputs(model, inputs, a.layer))
             for comp in a.components:
-                N = a.N_model if comp == "full_model" else a.N_component
+                N = a.N_model if comp in ("full_model", "layers_cycled") else a.N_component
                 todo = [t for t in range(a.T) if (L, comp, t) not in done]
                 if not todo:
                     continue

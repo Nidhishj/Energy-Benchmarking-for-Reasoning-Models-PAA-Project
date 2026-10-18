@@ -39,6 +39,7 @@ CLEAR_TABLE12 = {  # BERT-Base rows; no Norm row is reported here
           "full_model": (557.446, 6.968)},
 }
 ORDER = ["embedding", "attention", "attention_self", "ffn_intermediate", "ffn_output", "norm_all", "block",
+         "layers_cycled",
          "cls_head", "full_model"]
 
 
@@ -55,6 +56,12 @@ def derived(m: dict, n_layers: int = 12) -> dict:
     if all(k in m for k in ["block", "embedding", "cls_head", "full_model"]):
         out["captured_model"] = n_layers * m["block"] + m["embedding"] + m["cls_head"]
         out["pct_capture_model"] = 100 * out["captured_model"] / m["full_model"]
+    if all(k in m for k in ["layers_cycled", "embedding", "cls_head", "full_model"]):
+        # Our definition: the 12 layers replayed in sequence instead of 12 x one layer (cache residency, slot 2).
+        out["captured_model_cycled"] = m["layers_cycled"] + m["embedding"] + m["cls_head"]
+        out["pct_capture_model_cycled"] = 100 * out["captured_model_cycled"] / m["full_model"]
+        if "block" in m:
+            out["layers_cycled_over_12x_block"] = m["layers_cycled"] / (n_layers * m["block"])
     return out
 
 

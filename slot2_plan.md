@@ -178,3 +178,21 @@ git add results && git commit -m "Slot 2 results" && git push
 - [ ] Checkpoint overhead measured
 - [ ] B1 capture gap explained, or the tested hypotheses and their results written up
 - [ ] All results, logs and tables pushed to `main`
+
+## Slot 3 — 2026-10-18 16:00–18:00 (same GPU)
+
+Slot 2 finished B2b, B3, the B2a rerun, the checkpoint-overhead and B3-short repro checks, and explained the B1
+gap: one layer replayed N times stays in L2 and is underestimated by 5–9%; replaying the 12 layers in sequence
+gives %Capture(Model) ≥ 90% at all five lengths (`results/runs/B1debug*`). `run_b1.py` now measures that as the
+`layers_cycled` component, and `analyze_b1.py` reports `pct_capture_model_cycled` next to CLEAR's definition.
+
+| Time | Run | Est. |
+|---|---|---|
+| 16:00 | `git pull`, then official **B1** with `layers_cycled`: `python -u b1/run_b1.py --idle-s 10` (5 lengths, T = 20) | ~20 min |
+| 16:20 | **B2b repro**: `python -u b2/run_b2b.py --problems test/algebra/858.json test/algebra/246.json test/algebra/733.json --T-on 1 --T-off 1 --tag repro` | ~5 min |
+| 16:25 | **Third thinking-on trial**: `python -u b2/run_b2b.py --modes on --T-on 3 --trials 2 --tag extra --stop-at 17:25` | ~35 min |
+| 17:05 | Spare: `python -u b1/debug_capture.py --seq-lens 64 --each-layer --no-profile --tag each` (is layer 5 typical?) | ~6 min |
+| 17:35 | Analyses (B1 with the new run; B2b with the main run + `extra`), copy back, push | 15 min |
+
+In parallel (medserver, Nidhish): B2b and B3 on the RTX 6000 Ada for the cross-GPU comparison
+(`requirements.txt` env; same commands as slot 1/2).
