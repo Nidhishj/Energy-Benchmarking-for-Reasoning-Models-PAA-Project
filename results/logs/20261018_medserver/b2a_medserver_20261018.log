@@ -1,0 +1,24 @@
+GPU: NVIDIA RTX 6000 Ada Generation
+Generating train split:   0%|          | 0/3668 [00:00<?, ? examples/s]Generating train split:  27%|██▋       | 1000/3668 [00:00<00:00, 4278.10 examples/s]Generating train split: 100%|██████████| 3668/3668 [00:00<00:00, 15393.34 examples/s]
+Generating validation split:   0%|          | 0/408 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 408/408 [00:00<00:00, 61966.83 examples/s]
+Generating test split:   0%|          | 0/1725 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 1725/1725 [00:00<00:00, 204066.41 examples/s]
+MRPC validation: accuracy 87.75%, F1 91.35% on 408 pairs
+Measuring idle power for 30 s ...
+  idle: 41.9 W
+Run dir: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B2a/20261018-121427_B2a_gpu1_2f62426a
+dataset pass t0: 301.87 mJ/example (nvml, zeus 301.87), 8.37 s
+dataset pass t1: 317.91 mJ/example (nvml, zeus 317.91), 8.04 s
+dataset pass t2: 317.18 mJ/example (nvml, zeus 317.18), 8.04 s
+dataset pass t3: 322.60 mJ/example (nvml, zeus 322.60), 8.00 s
+dataset pass t4: 326.98 mJ/example (nvml, zeus 326.98), 8.02 s
+dataset pass t5: 302.11 mJ/example (nvml, zeus 302.11), 7.99 s
+dataset pass t6: 327.73 mJ/example (nvml, zeus 327.73), 8.01 s
+dataset pass t7: 310.63 mJ/example (nvml, zeus 310.63), 7.98 s
+dataset pass t8: 303.68 mJ/example (nvml, zeus 303.68), 8.00 s
+dataset pass t9: 325.06 mJ/example (nvml, zeus 325.06), 8.01 s
+example 342 ( 26 tokens): 320.372 mJ (5.3%)
+example 234 ( 44 tokens): 319.644 mJ (5.5%)
+example 273 ( 53 tokens): 332.619 mJ (4.4%)
+example 115 ( 63 tokens): 328.750 mJ (4.0%)
+example 233 ( 86 tokens): 354.326 mJ (5.1%)
+Run complete: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B2a/20261018-121427_B2a_gpu1_2f62426a

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "run_id": "20261018-121427_B2a_gpu1_2f62426a",
+  "session_id": "20261018-121427_server_gpu1",
+  "experiment": "B2a",
+  "git_commit": "51efc6c",
+  "git_dirty": false,
+  "command": "/scratch/nidhish/envs/energy/bin/python b2/run_b2a.py",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "textattack/bert-base-uncased-MRPC",
+    "local_path": "models/textattack--bert-base-uncased-MRPC",
+    "revision": null,
+    "class": "BertForSequenceClassification",
+    "dtype": "fp16",
+    "attn_impl": "sdpa",
+    "n_layers": 12
+  },
+  "config": {
+    "dataset": "nyu-mll/glue mrpc validation",
+    "n_pairs": 408,
+    "T": 10,
+    "N": 1000,
+    "per_example_idx": [
+      342,
+      234,
+      273,
+      115,
+      233
+    ],
+    "dtype": "fp16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "padding": false,
+    "zeus": true,
+    "pause_s": 0.5,
+    "passes_per_window": 5
+  },
+  "config_hash": "2f62426a",
+  "status": "complete",
+  "started": "20261018-121427",
+  "finished": "20261018-121936"
+}

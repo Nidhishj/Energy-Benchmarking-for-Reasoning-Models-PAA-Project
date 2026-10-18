@@ -1,0 +1,53 @@
+GPU: NVIDIA RTX 6000 Ada Generation (nvml index 0, GPU-66e0575b-9f2d-3533-a1aa-a5e213ab3888)
+Some weights of the model checkpoint at models/google-bert--bert-base-uncased were not used when initializing BertForMaskedLM: ['bert.pooler.dense.bias', 'bert.pooler.dense.weight', 'cls.seq_relationship.bias', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing BertForMaskedLM from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForMaskedLM from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Measuring idle power for 30 s ...
+  idle: 48.4 W at 42 C
+Run dir: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1/20261018-121417_B1_gpu0_a489156e
+L=   8 embedding             5.076 mJ  std   0.301  ( 5.9%)  ~0.83 s/trial
+L=   8 attention            10.204 mJ  std   0.749  ( 7.3%)  ~1.61 s/trial
+L=   8 attention_self        6.184 mJ  std   0.355  ( 5.7%)  ~0.97 s/trial
+L=   8 ffn_intermediate      2.250 mJ  std   0.273  (12.1%)  ~0.34 s/trial
+L=   8 ffn_output            3.472 mJ  std   0.319  ( 9.2%)  ~0.54 s/trial
+L=   8 norm_all              1.850 mJ  std   0.202  (10.9%)  ~0.31 s/trial
+L=   8 block                20.401 mJ  std   0.295  ( 1.4%)  ~2.98 s/trial
+L=   8 cls_head              9.258 mJ  std   0.461  ( 5.0%)  ~0.71 s/trial
+L=   8 full_model          346.391 mJ  std  31.836  ( 9.2%)  ~3.92 s/trial
+L=  32 embedding             5.628 mJ  std   0.394  ( 7.0%)  ~0.82 s/trial
+L=  32 attention            12.319 mJ  std   0.680  ( 5.5%)  ~1.72 s/trial
+L=  32 attention_self        7.747 mJ  std   0.386  ( 5.0%)  ~1.04 s/trial
+L=  32 ffn_intermediate      2.493 mJ  std   0.170  ( 6.8%)  ~0.33 s/trial
+L=  32 ffn_output            4.220 mJ  std   0.230  ( 5.5%)  ~0.53 s/trial
+L=  32 norm_all              1.655 mJ  std   0.288  (17.4%)  ~0.30 s/trial
+L=  32 block                25.214 mJ  std   0.993  ( 3.9%)  ~3.08 s/trial
+L=  32 cls_head             14.235 mJ  std   0.848  ( 6.0%)  ~0.74 s/trial
+L=  32 full_model          421.236 mJ  std  33.335  ( 7.9%)  ~4.12 s/trial
+L=  64 embedding             5.878 mJ  std   0.348  ( 5.9%)  ~0.83 s/trial
+L=  64 attention            12.493 mJ  std   0.654  ( 5.2%)  ~1.60 s/trial
+L=  64 attention_self        7.644 mJ  std   0.426  ( 5.6%)  ~0.96 s/trial
+L=  64 ffn_intermediate      3.011 mJ  std   0.417  (13.8%)  ~0.34 s/trial
+L=  64 ffn_output            4.686 mJ  std   0.288  ( 6.2%)  ~0.54 s/trial
+L=  64 norm_all              1.690 mJ  std   0.390  (23.1%)  ~0.29 s/trial
+L=  64 block                25.161 mJ  std   1.386  ( 5.5%)  ~3.00 s/trial
+L=  64 cls_head             14.684 mJ  std   1.225  ( 8.3%)  ~0.74 s/trial
+L=  64 full_model          515.580 mJ  std   5.944  ( 1.2%)  ~4.08 s/trial
+L=  96 embedding             6.907 mJ  std   0.719  (10.4%)  ~0.84 s/trial
+L=  96 attention            14.268 mJ  std   0.769  ( 5.4%)  ~1.62 s/trial
+L=  96 attention_self        8.648 mJ  std   0.681  ( 7.9%)  ~0.98 s/trial
+L=  96 ffn_intermediate      3.364 mJ  std   0.346  (10.3%)  ~0.33 s/trial
+L=  96 ffn_output            5.056 mJ  std   0.315  ( 6.2%)  ~0.54 s/trial
+L=  96 norm_all              1.814 mJ  std   0.375  (20.7%)  ~0.31 s/trial
+L=  96 block                27.537 mJ  std   1.542  ( 5.6%)  ~3.04 s/trial
+L=  96 cls_head             17.005 mJ  std   0.533  ( 3.1%)  ~0.74 s/trial
+L=  96 full_model          554.210 mJ  std   3.943  ( 0.7%)  ~4.14 s/trial
+L= 128 embedding             7.010 mJ  std   0.636  ( 9.1%)  ~0.84 s/trial
+L= 128 attention            15.014 mJ  std   0.741  ( 4.9%)  ~1.65 s/trial
+L= 128 attention_self        8.874 mJ  std   0.462  ( 5.2%)  ~0.99 s/trial
+L= 128 ffn_intermediate      3.015 mJ  std   0.371  (12.3%)  ~0.32 s/trial
+L= 128 ffn_output            4.831 mJ  std   0.314  ( 6.5%)  ~0.53 s/trial
+L= 128 norm_all              2.114 mJ  std   0.305  (14.4%)  ~0.30 s/trial
+L= 128 block                26.639 mJ  std   0.651  ( 2.4%)  ~3.04 s/trial
+L= 128 cls_head             17.292 mJ  std   0.720  ( 4.2%)  ~0.74 s/trial
+L= 128 full_model          514.749 mJ  std  48.370  ( 9.4%)  ~4.11 s/trial
+Run complete: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1/20261018-121417_B1_gpu0_a489156e
