@@ -85,7 +85,10 @@
     "order": "mode, then trial, then problem"
   },
   "config_hash": "ba965317",
-  "status": "stopped",
+  "status": "complete",
   "started": "20261017-193728",
-  "finished": "20261017-194626"
+  "finished": "20261018-151355",
+  "resumed_in_sessions": [
+    "20261018-140101_server_gpu0"
+  ]
 }

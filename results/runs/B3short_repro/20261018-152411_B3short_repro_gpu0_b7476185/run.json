@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "20261018-152411_B3short_repro_gpu0_b7476185",
+  "session_id": "20261018-152411_server_gpu0",
+  "experiment": "B3short_repro",
+  "git_commit": "41a3ddd",
+  "git_dirty": true,
+  "command": "/data/cs3406/team02/envs/energy/bin/python b3/run_b3_short.py --ks 1 5 30 --T 5 --idle-s 5 --tag repro --stop-at 15:38",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "problems": [
+      "test/algebra/858.json",
+      "test/algebra/246.json",
+      "test/algebra/733.json"
+    ],
+    "modes": [
+      "off",
+      "on"
+    ],
+    "ks": [
+      1,
+      5,
+      30
+    ],
+    "T": 5,
+    "target_s": 1.0,
+    "pause_s": 0.5,
+    "decoding": {
+      "off": {
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20
+      },
+      "on": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20
+      }
+    },
+    "instruction": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "forced_length": "min_new_tokens = max_new_tokens = k",
+    "N": "calibrated per config, >= target_s"
+  },
+  "config_hash": "b7476185",
+  "status": "complete",
+  "started": "20261018-152411",
+  "finished": "20261018-152649"
+}

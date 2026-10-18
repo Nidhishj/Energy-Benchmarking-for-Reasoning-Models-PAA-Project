@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "20261018-151418_B1debug_gpu0_20c5c7c6",
+  "session_id": "20261018-151418_server_gpu0",
+  "experiment": "B1debug",
+  "git_commit": "41a3ddd",
+  "git_dirty": true,
+  "command": "/data/cs3406/team02/envs/energy/bin/python b1/debug_capture.py --seq-lens 32 128 --idle-s 10",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "google-bert/bert-base-uncased",
+    "local_path": "models/google-bert--bert-base-uncased",
+    "class": "BertForMaskedLM",
+    "dtype": "fp16",
+    "attn_impl": "sdpa",
+    "n_layers": 12
+  },
+  "config": {
+    "seq_lens": [
+      32,
+      128
+    ],
+    "layer": 5,
+    "T": 10,
+    "N": {
+      "layer_alone": 10000,
+      "layers_cycled": 1000,
+      "layer_flushed": 2000,
+      "flush_only": 2000,
+      "encoder": 1000,
+      "backbone": 1000,
+      "embedding": 10000,
+      "head": 10000,
+      "full_model": 1000
+    },
+    "flush_mb": 384,
+    "dtype": "fp16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "prompt": "The capital of France is",
+    "repeat": 30,
+    "parts": [
+      "layer_alone",
+      "layers_cycled",
+      "layer_flushed",
+      "flush_only",
+      "encoder",
+      "backbone",
+      "embedding",
+      "head",
+      "full_model"
+    ],
+    "pause_s": 0.5,
+    "warmup_calls": 50
+  },
+  "config_hash": "20c5c7c6",
+  "status": "complete",
+  "started": "20261018-151418",
+  "finished": "20261018-151924"
+}
