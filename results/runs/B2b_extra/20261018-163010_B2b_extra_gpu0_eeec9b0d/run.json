@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "run_id": "20261018-163010_B2b_extra_gpu0_eeec9b0d",
+  "session_id": "20261018-163010_server_gpu0",
+  "experiment": "B2b_extra",
+  "git_commit": "b40e2b4",
+  "git_dirty": false,
+  "command": "/data/cs3406/team02/envs/energy/bin/python b2/run_b2b.py --modes on --T-on 3 --trials 2 --idle-s 10 --tag extra --stop-at 17:35",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "dataset": "HuggingFaceH4/MATH-500 (test split)",
+    "subset_selection": "6 per level (1-5), random.Random(0).sample over problems sorted by unique_id",
+    "problem_ids": [
+      "test/intermediate_algebra/1714.json",
+      "test/intermediate_algebra/431.json",
+      "test/algebra/1214.json",
+      "test/algebra/988.json",
+      "test/number_theory/612.json",
+      "test/number_theory/466.json",
+      "test/number_theory/46.json",
+      "test/intermediate_algebra/128.json",
+      "test/prealgebra/1247.json",
+      "test/intermediate_algebra/754.json",
+      "test/prealgebra/65.json",
+      "test/counting_and_probability/737.json",
+      "test/number_theory/45.json",
+      "test/algebra/2584.json",
+      "test/geometry/843.json",
+      "test/precalculus/356.json",
+      "test/algebra/2036.json",
+      "test/prealgebra/1742.json",
+      "test/intermediate_algebra/1981.json",
+      "test/counting_and_probability/25149.json",
+      "test/number_theory/1257.json",
+      "test/algebra/858.json",
+      "test/algebra/246.json",
+      "test/number_theory/417.json",
+      "test/prealgebra/951.json",
+      "test/algebra/733.json",
+      "test/intermediate_algebra/966.json",
+      "test/prealgebra/1423.json",
+      "test/intermediate_algebra/2196.json",
+      "test/geometry/880.json"
+    ],
+    "modes": [
+      "on"
+    ],
+    "T": {
+      "on": 3,
+      "off": 3
+    },
+    "max_new_tokens": {
+      "on": 8192,
+      "off": 2048
+    },
+    "decoding": {
+      "on": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20
+      }
+    },
+    "instruction": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "zeus": true,
+    "checkpoints": "1,2,4,...,512 then every 512",
+    "grader": "math-verify",
+    "order": "mode, then trial, then problem",
+    "trials": [
+      2
+    ]
+  },
+  "config_hash": "eeec9b0d",
+  "status": "complete",
+  "started": "20261018-163010",
+  "finished": "20261018-170244"
+}

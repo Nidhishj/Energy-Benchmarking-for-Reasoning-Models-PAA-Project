@@ -1,7 +1,7 @@
 # B3: energy per token vs output tokens
 
 Short runs: 20261017-192548_B3short_gpu0_4546c8ed
-Long runs (B2b checkpoints): 20261017-193728_B2b_gpu0_ba965317
+Long runs (B2b checkpoints): 20261017-193728_B2b_gpu0_ba965317, 20261018-163010_B2b_extra_gpu0_eeec9b0d
 
 ![B3-1](../figures/B3_final-1_short.png)
 
