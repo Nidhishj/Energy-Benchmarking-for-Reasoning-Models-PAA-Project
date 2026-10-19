@@ -28,7 +28,7 @@ import torch
 from transformers import StoppingCriteriaList, set_seed
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from energy import Recorder, get_meter  # noqa: E402
+from energy import GpuBusy, Recorder, get_meter  # noqa: E402
 from energy.checkpoint import EnergyCheckpoints, checkpoint_grid  # noqa: E402
 from energy.window import Window  # noqa: E402
 from llm import qwen  # noqa: E402
@@ -83,6 +83,7 @@ def main():
     others = meter.other_processes()
     if others and not a.allow_busy:
         sys.exit(f"GPU in use by other processes {others}; pick a free GPU or --allow-busy")
+    meter.strict = not a.allow_busy  # from here on, stop (GpuBusy) if another process appears
     print(f"GPU: {meter.name}", flush=True)
 
     subset = qwen.load_subset()
@@ -182,6 +183,9 @@ def main():
         status = "complete"
     except StopIteration:
         pass
+    except GpuBusy:
+        status = "gpu_busy"
+        raise
     except KeyboardInterrupt:
         status = "interrupted"
         raise

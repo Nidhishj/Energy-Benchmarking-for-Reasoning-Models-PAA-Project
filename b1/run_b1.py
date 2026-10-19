@@ -21,7 +21,7 @@ import torch
 from transformers import AutoModelForMaskedLM, AutoTokenizer
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from energy import GpuMeter, Recorder, clear_measure  # noqa: E402
+from energy import GpuBusy, GpuMeter, Recorder, clear_measure  # noqa: E402
 
 DTYPES = {"fp16": torch.float16, "fp32": torch.float32, "bf16": torch.bfloat16}
 COMPONENTS = ["embedding", "attention", "attention_self", "ffn_intermediate", "ffn_output", "norm_all", "block",
@@ -139,6 +139,7 @@ def main():
     others = meter.other_processes()
     if others and not a.allow_busy:
         sys.exit(f"GPU {meter.nvml_index} is in use by other processes {others}; pick a free GPU or --allow-busy")
+    meter.strict = not a.allow_busy  # from here on, stop (GpuBusy) if another process appears
     print(f"GPU: {meter.name} (nvml index {meter.nvml_index}, {meter.uuid})", flush=True)
 
     tok = AutoTokenizer.from_pretrained(a.model)
@@ -189,6 +190,9 @@ def main():
                 print(f"L={L:4d} {comp:17s} {v.mean():9.3f} mJ  std {v.std(unbiased=False):7.3f}  "
                       f"({100 * v.std(unbiased=False) / v.mean():4.1f}%)  ~{trial_s:.2f} s/trial", flush=True)
         status = "complete"
+    except GpuBusy:
+        status = "gpu_busy"
+        raise
     except KeyboardInterrupt:
         status = "interrupted"
         raise

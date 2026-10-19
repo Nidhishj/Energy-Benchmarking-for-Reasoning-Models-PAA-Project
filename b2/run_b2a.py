@@ -23,7 +23,7 @@ from datasets import load_dataset
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from energy import Recorder, clear_measure, get_meter  # noqa: E402
+from energy import GpuBusy, Recorder, clear_measure, get_meter  # noqa: E402
 from energy.window import Window  # noqa: E402
 
 DTYPES = {"fp16": torch.float16, "fp32": torch.float32, "bf16": torch.bfloat16}
@@ -60,6 +60,7 @@ def main():
     others = meter.other_processes()
     if others and not a.allow_busy:
         sys.exit(f"GPU in use by other processes {others}; pick a free GPU or --allow-busy")
+    meter.strict = not a.allow_busy  # from here on, stop (GpuBusy) if another process appears
     print(f"GPU: {meter.name}", flush=True)
 
     ds = load_dataset("nyu-mll/glue", "mrpc", split="validation")
@@ -143,6 +144,9 @@ def main():
             print(f"example {idx:3d} ({lengths[idx]:3d} tokens): {v.mean():.3f} mJ "
                   f"({100 * v.std(unbiased=False) / v.mean():.1f}%)", flush=True)
         status = "complete"
+    except GpuBusy:
+        status = "gpu_busy"
+        raise
     except KeyboardInterrupt:
         status = "interrupted"
         raise

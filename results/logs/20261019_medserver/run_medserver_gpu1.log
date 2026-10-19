@@ -1,0 +1,8 @@
+2026-10-19 12:26:38 [gpu1] check: processes=0 memory_used=2MiB util=0% /scratch_free=15G load=0.68 0.44 0.28
+2026-10-19 12:26:38 [gpu1] start b3short: python -u b3/run_b3_short.py   (log: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/logs/20261019_medserver/b3short_gpu1_122638.log)
+2026-10-19 12:41:53 [gpu1] done  b3short: Run complete: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B3short/20261019-122925_B3short_gpu1_4546c8ed
+2026-10-19 12:41:53 [gpu1] check: processes=0 memory_used=2MiB util=33% /scratch_free=15G load=1.84 1.81 1.31
+2026-10-19 12:41:53 [gpu1] GPU 1 NOT FULLY FREE:
+gpu_uuid, pid, used_gpu_memory [MiB]
+GPU-66e0575b-9f2d-3533-a1aa-a5e213ab3888, 1282802, 16762 MiB
+2026-10-19 12:41:53 [gpu1] not starting b1; stopping (remaining steps skipped)

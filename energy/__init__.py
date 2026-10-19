@@ -1,6 +1,6 @@
 """Shared energy-measurement code (NVML meter, CLEAR-style amplification, result records)."""
 
-from energy.meter import GpuMeter
+from energy.meter import GpuBusy, GpuMeter
 from energy.clear import clear_measure
 from energy.record import Recorder
 
@@ -14,4 +14,4 @@ def get_meter(fake: bool = False, torch_device: int = 0):
     return GpuMeter(torch_device)
 
 
-__all__ = ["GpuMeter", "clear_measure", "Recorder", "get_meter"]
+__all__ = ["GpuBusy", "GpuMeter", "clear_measure", "Recorder", "get_meter"]

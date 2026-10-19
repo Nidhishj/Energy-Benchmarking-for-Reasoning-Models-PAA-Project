@@ -1,0 +1,84 @@
+GPU: NVIDIA RTX 6000 Ada Generation
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  2.11it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:01,  1.60it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:02<00:01,  1.36it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:02<00:00,  1.34it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:02<00:00,  1.75it/s]
+Measuring idle power for 30 s ...
+  idle: 46.6 W
+Run dir: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B3short/20261019-122925_B3short_gpu1_4546c8ed
+shortest off k=  1 N=  19 E(k)    6658.0 mJ ( 9.7%)  E(k)/k   6658.0 mJ/tok
+shortest off k=  2 N=  17 E(k)   11753.4 mJ ( 7.9%)  E(k)/k   5876.7 mJ/tok
+shortest off k=  3 N=  13 E(k)   17206.8 mJ ( 7.4%)  E(k)/k   5735.6 mJ/tok
+shortest off k=  4 N=  10 E(k)   22956.8 mJ ( 4.8%)  E(k)/k   5739.2 mJ/tok
+shortest off k=  5 N=   8 E(k)   29493.0 mJ ( 5.1%)  E(k)/k   5898.6 mJ/tok
+shortest off k=  6 N=   7 E(k)   35307.5 mJ ( 7.8%)  E(k)/k   5884.6 mJ/tok
+shortest off k=  8 N=   5 E(k)   47120.3 mJ ( 5.1%)  E(k)/k   5890.0 mJ/tok
+shortest off k= 10 N=   4 E(k)   58931.2 mJ ( 4.2%)  E(k)/k   5893.1 mJ/tok
+shortest off k= 12 N=   4 E(k)   71767.0 mJ ( 4.2%)  E(k)/k   5980.6 mJ/tok
+shortest off k= 15 N=   3 E(k)   88541.3 mJ ( 4.7%)  E(k)/k   5902.8 mJ/tok
+shortest off k= 20 N=   2 E(k)  120923.9 mJ ( 6.7%)  E(k)/k   6046.2 mJ/tok
+shortest off k= 25 N=   2 E(k)  146929.6 mJ ( 3.8%)  E(k)/k   5877.2 mJ/tok
+shortest off k= 30 N=   2 E(k)  182090.9 mJ ( 5.2%)  E(k)/k   6069.7 mJ/tok
+shortest on  k=  1 N=  35 E(k)    6739.3 mJ ( 6.4%)  E(k)/k   6739.3 mJ/tok
+shortest on  k=  2 N=  19 E(k)   12317.5 mJ ( 6.2%)  E(k)/k   6158.8 mJ/tok
+shortest on  k=  3 N=  13 E(k)   19095.2 mJ ( 4.3%)  E(k)/k   6365.1 mJ/tok
+shortest on  k=  4 N=  10 E(k)   24338.7 mJ ( 5.5%)  E(k)/k   6084.7 mJ/tok
+shortest on  k=  5 N=   8 E(k)   29595.4 mJ ( 4.7%)  E(k)/k   5919.1 mJ/tok
+shortest on  k=  6 N=   7 E(k)   36596.5 mJ ( 3.0%)  E(k)/k   6099.4 mJ/tok
+shortest on  k=  8 N=   5 E(k)   48738.6 mJ ( 4.9%)  E(k)/k   6092.3 mJ/tok
+shortest on  k= 10 N=   4 E(k)   59652.7 mJ ( 7.7%)  E(k)/k   5965.3 mJ/tok
+shortest on  k= 12 N=   4 E(k)   72737.4 mJ ( 4.6%)  E(k)/k   6061.4 mJ/tok
+shortest on  k= 15 N=   3 E(k)   89035.5 mJ ( 4.9%)  E(k)/k   5935.7 mJ/tok
+shortest on  k= 20 N=   2 E(k)  116176.3 mJ ( 6.0%)  E(k)/k   5808.8 mJ/tok
+shortest on  k= 25 N=   2 E(k)  147877.6 mJ ( 4.7%)  E(k)/k   5915.1 mJ/tok
+shortest on  k= 30 N=   2 E(k)  178698.9 mJ ( 3.7%)  E(k)/k   5956.6 mJ/tok
+middle   off k=  1 N=  35 E(k)    7107.1 mJ ( 2.0%)  E(k)/k   7107.1 mJ/tok
+middle   off k=  2 N=  19 E(k)   13632.4 mJ ( 2.0%)  E(k)/k   6816.2 mJ/tok
+middle   off k=  3 N=  13 E(k)   19236.8 mJ ( 3.6%)  E(k)/k   6412.3 mJ/tok
+middle   off k=  4 N=  10 E(k)   25594.3 mJ ( 5.4%)  E(k)/k   6398.6 mJ/tok
+middle   off k=  5 N=   8 E(k)   29674.0 mJ ( 6.1%)  E(k)/k   5934.8 mJ/tok
+middle   off k=  6 N=   7 E(k)   36491.5 mJ ( 4.2%)  E(k)/k   6081.9 mJ/tok
+middle   off k=  8 N=   5 E(k)   49245.2 mJ ( 7.3%)  E(k)/k   6155.7 mJ/tok
+middle   off k= 10 N=   4 E(k)   59849.7 mJ ( 4.6%)  E(k)/k   5985.0 mJ/tok
+middle   off k= 12 N=   4 E(k)   74888.2 mJ ( 3.6%)  E(k)/k   6240.7 mJ/tok
+middle   off k= 15 N=   3 E(k)   93440.7 mJ ( 3.3%)  E(k)/k   6229.4 mJ/tok
+middle   off k= 20 N=   2 E(k)  120906.7 mJ ( 1.4%)  E(k)/k   6045.3 mJ/tok
+middle   off k= 25 N=   2 E(k)  147692.8 mJ ( 4.6%)  E(k)/k   5907.7 mJ/tok
+middle   off k= 30 N=   2 E(k)  183385.3 mJ ( 5.0%)  E(k)/k   6112.8 mJ/tok
+middle   on  k=  1 N=  35 E(k)    7026.3 mJ ( 4.0%)  E(k)/k   7026.3 mJ/tok
+middle   on  k=  2 N=  19 E(k)   13395.9 mJ ( 8.6%)  E(k)/k   6698.0 mJ/tok
+middle   on  k=  3 N=  13 E(k)   19258.4 mJ ( 1.1%)  E(k)/k   6419.5 mJ/tok
+middle   on  k=  4 N=  10 E(k)   23965.0 mJ ( 5.5%)  E(k)/k   5991.3 mJ/tok
+middle   on  k=  5 N=   8 E(k)   31102.7 mJ ( 4.7%)  E(k)/k   6220.5 mJ/tok
+middle   on  k=  6 N=   7 E(k)   36347.6 mJ ( 6.1%)  E(k)/k   6057.9 mJ/tok
+middle   on  k=  8 N=   5 E(k)   49377.3 mJ ( 6.8%)  E(k)/k   6172.2 mJ/tok
+middle   on  k= 10 N=   4 E(k)   59698.6 mJ ( 5.7%)  E(k)/k   5969.9 mJ/tok
+middle   on  k= 12 N=   4 E(k)   74377.2 mJ ( 4.7%)  E(k)/k   6198.1 mJ/tok
+middle   on  k= 15 N=   3 E(k)   92342.9 mJ ( 4.6%)  E(k)/k   6156.2 mJ/tok
+middle   on  k= 20 N=   2 E(k)  123066.0 mJ ( 1.6%)  E(k)/k   6153.3 mJ/tok
+middle   on  k= 25 N=   2 E(k)  151199.7 mJ ( 2.4%)  E(k)/k   6048.0 mJ/tok
+middle   on  k= 30 N=   2 E(k)  182348.5 mJ ( 3.8%)  E(k)/k   6078.3 mJ/tok
+longest  off k=  1 N=  27 E(k)   10527.4 mJ ( 6.0%)  E(k)/k  10527.4 mJ/tok
+longest  off k=  2 N=  16 E(k)   14514.6 mJ ( 7.4%)  E(k)/k   7257.3 mJ/tok
+longest  off k=  3 N=  12 E(k)   20139.7 mJ ( 4.6%)  E(k)/k   6713.2 mJ/tok
+longest  off k=  4 N=   9 E(k)   25222.1 mJ ( 7.8%)  E(k)/k   6305.5 mJ/tok
+longest  off k=  5 N=   8 E(k)   30553.5 mJ ( 4.5%)  E(k)/k   6110.7 mJ/tok
+longest  off k=  6 N=   7 E(k)   35055.2 mJ ( 6.3%)  E(k)/k   5842.5 mJ/tok
+longest  off k=  8 N=   5 E(k)   47500.3 mJ ( 5.9%)  E(k)/k   5937.5 mJ/tok
+longest  off k= 10 N=   4 E(k)   61418.1 mJ ( 6.5%)  E(k)/k   6141.8 mJ/tok
+longest  off k= 12 N=   4 E(k)   72185.8 mJ ( 4.8%)  E(k)/k   6015.5 mJ/tok
+longest  off k= 15 N=   3 E(k)   90041.7 mJ ( 1.9%)  E(k)/k   6002.8 mJ/tok
+longest  off k= 20 N=   2 E(k)  119326.1 mJ ( 4.7%)  E(k)/k   5966.3 mJ/tok
+longest  off k= 25 N=   2 E(k)  150395.2 mJ ( 6.3%)  E(k)/k   6015.8 mJ/tok
+longest  off k= 30 N=   2 E(k)  183218.7 mJ ( 4.3%)  E(k)/k   6107.3 mJ/tok
+longest  on  k=  1 N=  25 E(k)   11051.1 mJ ( 5.4%)  E(k)/k  11051.1 mJ/tok
+longest  on  k=  2 N=  16 E(k)   15006.0 mJ ( 8.7%)  E(k)/k   7503.0 mJ/tok
+longest  on  k=  3 N=  12 E(k)   19510.1 mJ ( 4.4%)  E(k)/k   6503.4 mJ/tok
+longest  on  k=  4 N=   9 E(k)   24653.9 mJ ( 6.0%)  E(k)/k   6163.5 mJ/tok
+longest  on  k=  5 N=   8 E(k)   29461.9 mJ ( 4.7%)  E(k)/k   5892.4 mJ/tok
+longest  on  k=  6 N=   7 E(k)   34231.0 mJ ( 2.0%)  E(k)/k   5705.2 mJ/tok
+longest  on  k=  8 N=   5 E(k)   48778.6 mJ ( 5.7%)  E(k)/k   6097.3 mJ/tok
+longest  on  k= 10 N=   4 E(k)   57043.5 mJ ( 4.7%)  E(k)/k   5704.4 mJ/tok
+longest  on  k= 12 N=   4 E(k)   72910.6 mJ ( 4.7%)  E(k)/k   6075.9 mJ/tok
+longest  on  k= 15 N=   3 E(k)   90938.9 mJ ( 6.8%)  E(k)/k   6062.6 mJ/tok
+longest  on  k= 20 N=   2 E(k)  120707.8 mJ ( 3.0%)  E(k)/k   6035.4 mJ/tok
+longest  on  k= 25 N=   2 E(k)  151634.2 mJ ( 0.6%)  E(k)/k   6065.4 mJ/tok
+longest  on  k= 30 N=   2 E(k)  183791.9 mJ ( 4.7%)  E(k)/k   6126.4 mJ/tok
+Run complete: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B3short/20261019-122925_B3short_gpu1_4546c8ed

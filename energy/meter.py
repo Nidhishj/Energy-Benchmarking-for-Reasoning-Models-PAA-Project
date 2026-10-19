@@ -8,8 +8,23 @@ and NVML always point at the same card.
 import os
 import time
 
+import sys
+
 import pynvml
 import torch
+
+
+class GpuBusy(SystemExit):
+    """Another process appeared on our GPU mid-run. Exits with code 3 (run status "gpu_busy"), so a wrapper script
+    can tell it apart from a crash. Raised from a counter read, so the trial in progress is never written and
+    `--resume` redoes it. Only our own process stops; the other process is not touched."""
+
+    EXIT_CODE = 3
+
+    def __init__(self, nvml_index: int, others: list[dict]):
+        super().__init__(self.EXIT_CODE)
+        self.others = others
+        self.message = f"GPU {nvml_index} NOT FREE: other processes {others}; stopping this run"
 
 
 class GpuMeter:
@@ -21,12 +36,26 @@ class GpuMeter:
         self.handle = pynvml.nvmlDeviceGetHandleByUUID(self.uuid)
         self.nvml_index = pynvml.nvmlDeviceGetIndex(self.handle)
         self.name = pynvml.nvmlDeviceGetName(self.handle)
+        # Runners set this to `not --allow-busy`: then every counter read first checks that the GPU is still ours.
+        self.strict = False
 
     def sync(self):
         torch.cuda.synchronize(self.torch_device)
 
+    def check_free(self):
+        """In strict mode, raise GpuBusy if any other process is on this GPU."""
+        if self.strict:
+            others = self.other_processes()
+            if others:
+                err = GpuBusy(self.nvml_index, others)
+                print(f"{time.strftime('%H:%M:%S')} {err.message}", file=sys.stderr, flush=True)
+                raise err
+
     def read(self, sync: bool = True) -> tuple[int, float]:
-        """Return (total energy since boot in mJ, wall time in s). Syncs the GPU first so queued work is counted."""
+        """Return (total energy since boot in mJ, wall time in s). Syncs the GPU first so queued work is counted.
+
+        In strict mode, checks for other processes first, so a trial is rejected if one started during it."""
+        self.check_free()
         if sync:
             self.sync()
         return pynvml.nvmlDeviceGetTotalEnergyConsumption(self.handle), time.time()
