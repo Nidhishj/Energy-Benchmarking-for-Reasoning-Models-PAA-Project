@@ -2,3 +2,11 @@
 2026-10-19 12:26:38 [gpu0] start b2b: python -u b2/run_b2b.py --T-on 3  (log: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/logs/20261019_medserver/b2b_gpu0_122638.log)
 2026-10-19 13:06:13 [gpu0] STOPPED b2b: GPU 0 not fully free (another process appeared). 13:06:12 GPU 0 NOT FREE: other processes [{'pid': 1288799, 'used_MiB': 590}]; stopping this run
 2026-10-19 13:06:13 [gpu0] resume later with: --resume results/runs/B2b/20261019-122926_B2b_gpu0_feea8f05
+2026-10-19 22:50:21 [gpu0] check: processes=0 memory_used=2MiB util=0% /scratch_free=174G load=3.03 1.61 0.67
+2026-10-19 22:50:21 [gpu0] start b2b: python -u b2/run_b2b.py --T-on 3 --resume results/runs/B2b/20261019-122926_B2b_gpu0_feea8f05  (log: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/logs/20261019_medserver/b2b_gpu0_225021.log)
+2026-10-19 22:59:07 [gpu0] STOPPED b2b: GPU 0 not fully free (another process appeared). 22:59:06 GPU 0 NOT FREE: other processes [{'pid': 1450680, 'used_MiB': 12}]; stopping this run
+2026-10-19 22:59:07 [gpu0] resume later with: --resume results/runs/B2b/20261019-122926_B2b_gpu0_feea8f05
+2026-10-19 23:05:03 [gpu0] check: processes=0 memory_used=2MiB util=0% /scratch_free=174G load=0.37 1.25 1.37
+2026-10-19 23:05:03 [gpu0] start b2b: python -u b2/run_b2b.py --T-on 3 --resume results/runs/B2b/20261019-122926_B2b_gpu0_feea8f05  (log: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/logs/20261019_medserver/b2b_gpu0_230503.log)
+2026-10-20 01:33:01 [gpu0] done  b2b: Run complete: results/runs/B2b/20261019-122926_B2b_gpu0_feea8f05
+2026-10-20 01:33:01 [gpu0] all steps done: b2b

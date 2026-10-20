@@ -173,6 +173,6 @@ Long runs (B2b checkpoints): 20261017-193728_B2b_gpu0_ba965317, 20261019-122926_
 | GPU | Mode | E(1) shortest / middle / longest (J) | Plateau (J/token) | k within 5% of plateau |
 |---|---|---|---|---|
 | NVIDIA RTX 6000 Ada Generation | off | 6.66 / 7.11 / 10.53 | 6.866 | 1 |
-| NVIDIA RTX 6000 Ada Generation | on | 6.74 / 7.03 / 11.05 | 7.070 | 1 |
+| NVIDIA RTX 6000 Ada Generation | on | 6.74 / 7.03 / 11.05 | 7.108 | 1 |
 | NVIDIA RTX PRO 5000 Blackwell | off | 5.37 / 6.30 / 9.10 | 5.025 | 4 |
 | NVIDIA RTX PRO 5000 Blackwell | on | 5.60 / 5.88 / 9.13 | 5.033 | 3 |

@@ -85,7 +85,11 @@
     "order": "mode, then trial, then problem"
   },
   "config_hash": "feea8f05",
-  "status": "gpu_busy",
+  "status": "complete",
   "started": "20261019-122926",
-  "finished": "20261019-130612"
+  "finished": "20261020-013300",
+  "resumed_in_sessions": [
+    "20261019-225117_server_gpu0",
+    "20261019-230541_server_gpu0"
+  ]
 }

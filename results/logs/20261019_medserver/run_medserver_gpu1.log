@@ -6,3 +6,11 @@
 gpu_uuid, pid, used_gpu_memory [MiB]
 GPU-66e0575b-9f2d-3533-a1aa-a5e213ab3888, 1282802, 16762 MiB
 2026-10-19 12:41:53 [gpu1] not starting b1; stopping (remaining steps skipped)
+2026-10-19 22:50:21 [gpu1] check: processes=0 memory_used=2MiB util=0% /scratch_free=174G load=3.03 1.61 0.67
+2026-10-19 22:50:21 [gpu1] start b1: python -u b1/run_b1.py   (log: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/logs/20261019_medserver/b1_gpu1_225021.log)
+2026-10-19 22:50:32 [gpu1] FAILED b1 (exit 1). Last lines:
+GPU 1 is in use by other processes [{'pid': 1448023, 'used_MiB': 562}]; pick a free GPU or --allow-busy
+2026-10-19 23:05:03 [gpu1] check: processes=0 memory_used=2MiB util=0% /scratch_free=174G load=0.37 1.25 1.37
+2026-10-19 23:05:03 [gpu1] start b1: python -u b1/run_b1.py   (log: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/logs/20261019_medserver/b1_gpu1_230503.log)
+2026-10-19 23:40:02 [gpu1] done  b1: Run complete: /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1/20261019-230539_B1_gpu1_8f44f5d3
+2026-10-19 23:40:02 [gpu1] all steps done: b1
