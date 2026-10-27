@@ -1,0 +1,27 @@
+--- clear_repo/full_measure.py	2026-10-16 17:19:44.148994701 +0530
++++ /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261026-141445_B1clear_gpu0/scripts/r2/L32/full_measure.py	2026-10-26 14:48:50.936005342 +0530
+@@ -9,12 +9,12 @@
+ # ------------------------------
+ # Settings
+ # ------------------------------
+-model_name = "bert-base-uncased"
++model_name = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/models/google-bert--bert-base-uncased"  # patched
+ cache_dir = "./.hfCache"
+ repeat_count = 1000
+ num_trials = 20
+-device_index = 0
+-output_file = f"16_full.json"
++device_index = 0  # patched
++output_file = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261026-141445_B1clear_gpu0/scripts/r2/L32/full.json"  # patched
+ 
+ # ------------------------------
+ # NVML Init
+@@ -39,7 +39,7 @@
+ 
+ # Example input
+ prompt = "The capital of France is"*10 
+-seq_len = 8
++seq_len = 32  # patched
+ tokens = tokenizer.tokenize(prompt)
+ stud = tokens[:seq_len]
+ prompt = tokenizer.convert_tokens_to_string(stud)

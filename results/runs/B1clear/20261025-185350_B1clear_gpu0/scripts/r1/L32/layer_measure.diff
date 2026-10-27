@@ -1,0 +1,20 @@
+--- clear_repo/layer_measure.py	2026-10-16 17:19:44.148994701 +0530
++++ /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261025-185350_B1clear_gpu0/scripts/r1/L32/layer_measure.py	2026-10-25 18:59:58.463984489 +0530
+@@ -9,13 +9,13 @@
+ # ------------------------------
+ # Settings
+ # ------------------------------
+-model_name = "bert-base-uncased"
++model_name = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/models/google-bert--bert-base-uncased"  # patched
+ cache_dir = "./.hfCache"
+-activations_file = "activations2.pt"
++activations_file = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261025-185350_B1clear_gpu0/scripts/r1/L32/act.pt"  # patched
+ repeat_count = 10000
+ num_trials = 20
+-device_index = 0
+-output_file = f"16_block.json"
++device_index = 0  # patched
++output_file = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261025-185350_B1clear_gpu0/scripts/r1/L32/block.json"  # patched
+ 
+ # ------------------------------
+ # NVML Init

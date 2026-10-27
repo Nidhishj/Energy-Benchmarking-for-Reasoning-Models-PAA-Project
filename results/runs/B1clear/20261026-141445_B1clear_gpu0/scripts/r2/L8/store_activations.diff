@@ -1,0 +1,30 @@
+--- clear_repo/store_activations.py	2026-10-16 17:19:44.148994701 +0530
++++ /scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261026-141445_B1clear_gpu0/scripts/r2/L8/store_activations.py	2026-10-26 14:43:20.335068115 +0530
+@@ -4,16 +4,14 @@
+ import os
+ 
+ # Settings
+-model_name = "bert-base-uncased"   # simpler alias also works
++model_name = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/models/google-bert--bert-base-uncased"  # patched
+ cache_dir = "./.hfCache"
+-output_file = "activations2.pt"
++output_file = "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/results/runs/B1clear/20261026-141445_B1clear_gpu0/scripts/r2/L8/act.pt"  # patched
+ 
+ # Load model and tokenizer
+ tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+ model = AutoModelForMaskedLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.float16).cuda()
+ model.eval()
+-print(model)
+-exit(0)
+ # Pick a random encoder layer index
+ num_layers = len(model.bert.encoder.layer)
+ layer_to_capture = 5   # for example
+@@ -71,7 +69,7 @@
+ 
+ # Input prompt
+ prompt = "The capital of France is"*10 
+-seq_len = 8
++seq_len = 8  # patched
+ tokens = tokenizer.tokenize(prompt)
+ stud = tokens[:seq_len]
+ prompt = tokenizer.convert_tokens_to_string(stud)

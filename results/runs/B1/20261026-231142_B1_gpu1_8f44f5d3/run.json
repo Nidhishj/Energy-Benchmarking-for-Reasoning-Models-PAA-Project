@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "20261026-231142_B1_gpu1_8f44f5d3",
+  "session_id": "20261026-231142_server_gpu1",
+  "experiment": "B1",
+  "git_commit": "23b2b92",
+  "git_dirty": true,
+  "command": "/scratch/nidhish/envs/energy/bin/python b1/run_b1.py",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "google-bert/bert-base-uncased",
+    "local_path": "models/google-bert--bert-base-uncased",
+    "revision": null,
+    "class": "BertForMaskedLM",
+    "dtype": "fp16",
+    "attn_impl": "sdpa",
+    "n_layers": 12
+  },
+  "config": {
+    "seq_lens": [
+      8,
+      32,
+      64,
+      96,
+      128
+    ],
+    "layer": 5,
+    "T": 20,
+    "N_component": 10000,
+    "N_model": 1000,
+    "dtype": "fp16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "prompt": "The capital of France is",
+    "repeat": 30,
+    "components": [
+      "embedding",
+      "attention",
+      "attention_self",
+      "ffn_intermediate",
+      "ffn_output",
+      "norm_all",
+      "block",
+      "layers_cycled",
+      "cls_head",
+      "full_model"
+    ],
+    "pause_s": 0.5,
+    "warmup_calls": 100,
+    "sync_before_read": true,
+    "replay_inputs": "exact args/kwargs from a real forward pass"
+  },
+  "config_hash": "8f44f5d3",
+  "status": "complete",
+  "started": "20261026-231142",
+  "finished": "20261027-175516",
+  "resumed_in_sessions": [
+    "20261027-173153_server_gpu1"
+  ]
+}

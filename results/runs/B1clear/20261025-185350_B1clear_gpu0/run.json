@@ -1,0 +1,52 @@
+{
+  "run_id": "20261025-185350_B1clear_gpu0",
+  "experiment": "B1clear",
+  "host": "server",
+  "started": "20261025-185422",
+  "gpu_name": "NVIDIA RTX 6000 Ada Generation",
+  "gpu_uuid": "GPU-66e0575b-9f2d-3533-a1aa-a5e213ab3888",
+  "nvml_index": 0,
+  "cuda_visible_devices": "0",
+  "driver": "560.35.03",
+  "power_limit_W": 300.0,
+  "memory_total_MiB": 49140,
+  "idle": {
+    "duration_s": 30.00182580947876,
+    "E_start_mJ": 911281310609,
+    "E_end_mJ": 911282263796,
+    "mean_W": 31.77096640894604,
+    "temp_C": 39,
+    "sm_clock_MHz": 210,
+    "mem_clock_MHz": 405,
+    "power_W": 26.824
+  },
+  "versions": {
+    "python": "3.11.17",
+    "torch": "2.6.0+cu124",
+    "transformers": "4.57.1",
+    "nvidia-ml-py": "13.615.71",
+    "zeus": "0.16.0",
+    "datasets": "5.0.1",
+    "math-verify": "0.9.0"
+  },
+  "git_commit": "23b2b92",
+  "rounds": 3,
+  "seq_lens": [
+    8,
+    32,
+    64,
+    96,
+    128
+  ],
+  "trials_override": null,
+  "clear_scripts_sha256_prefix": {
+    "store_activations.py": "32c073d9f4b432e7",
+    "layer_measure.py": "0133c1f0402c969a",
+    "module_measure.py": "ef504df0ff399f55",
+    "full_measure.py": "a32b2637bce29d0d"
+  },
+  "source": "https://anonymous.4open.science/r/CLEAR-D487 (clear_repo/, see clear_repo/SOURCE.md)",
+  "status": "gpu_busy",
+  "finished": "20261025-194003",
+  "stopped_note": "12 MiB process pid 2333580 appeared during r2 L64 full_measure; r2 L64 discarded; rounds 2-3 and control not run"
+}
