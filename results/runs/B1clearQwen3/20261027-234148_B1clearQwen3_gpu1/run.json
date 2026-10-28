@@ -1,0 +1,52 @@
+{
+  "run_id": "20261027-234148_B1clearQwen3_gpu1",
+  "experiment": "B1clearQwen3",
+  "host": "server",
+  "started": "20261027-234220",
+  "gpu_name": "NVIDIA RTX 6000 Ada Generation",
+  "gpu_uuid": "GPU-7b365b1b-c169-295a-0651-2cd473beecc5",
+  "nvml_index": 1,
+  "cuda_visible_devices": "1",
+  "driver": "560.35.03",
+  "power_limit_W": 300.0,
+  "memory_total_MiB": 49140,
+  "idle": {
+    "duration_s": 30.001750946044922,
+    "E_start_mJ": 761201087733,
+    "E_end_mJ": 761201600785,
+    "mean_W": 17.10073525117489,
+    "temp_C": 54,
+    "sm_clock_MHz": 210,
+    "mem_clock_MHz": 405,
+    "power_W": 27.841
+  },
+  "versions": {
+    "python": "3.11.17",
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.1",
+    "nvidia-ml-py": "13.615.71",
+    "zeus": "0.16.0",
+    "datasets": "5.0.1",
+    "math-verify": "0.9.0"
+  },
+  "git_commit": "aae6c59",
+  "model": "Qwen/Qwen3-8B",
+  "dtype": "fp16",
+  "attn_impl": "sdpa",
+  "layer": 5,
+  "seq_lens": [
+    8,
+    32,
+    64,
+    96,
+    128
+  ],
+  "trials": 20,
+  "N": {
+    "parts": 10000,
+    "full_model": 1000
+  },
+  "method": "CLEAR clear_repo/ BERT scripts adapted to Qwen3 (b1/clear_qwen3/)",
+  "status": "complete",
+  "finished": "20261028-014449"
+}
