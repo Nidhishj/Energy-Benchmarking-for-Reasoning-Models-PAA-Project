@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "run_id": "20261029-024759_Laya_english_clear_gpu1_2d1790f6",
+  "session_id": "20261029-024759_server_gpu1",
+  "experiment": "Laya_english_clear",
+  "git_commit": "ba84c6f",
+  "git_dirty": true,
+  "command": "/scratch/nidhish/envs/energy/bin/python indic_models/run_laya.py --checkpoint english --method clear --components embedding L5.attn_norm L5.attn L5.mlp_norm L5.mlp L5.block L6.attn_norm L6.attn L6.mlp_norm L6.mlp L6.block final_norm head0 head1 decision_head encoder_cycled full_model",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "convaiinnovations/laya",
+    "local_path": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/models/convaiinnovations--laya",
+    "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "laya_version": "0.4.17",
+    "class": "DecisionModel",
+    "encoder": "ModernBertModel",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 28,
+    "layer_types": [
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global"
+    ],
+    "sliding_window": 128,
+    "hidden_size": 1024,
+    "n_params_M": 421.3
+  },
+  "config": {
+    "checkpoint": "english",
+    "method": "clear",
+    "seq_lens": [
+      64,
+      128,
+      256,
+      512
+    ],
+    "layers": [
+      5,
+      6
+    ],
+    "T": 20,
+    "N_component": 10000,
+    "N_model": 1000,
+    "dtype": "bf16",
+    "batch_size": 1,
+    "question": {
+      "department": {
+        "type": "choice",
+        "instructions": "Which department should handle this?",
+        "criteria": {
+          "billing": "invoices, payments, refunds",
+          "technical": "bugs, outages, system errors",
+          "other": "everything else"
+        }
+      }
+    },
+    "text": "Hi, we were billed twice for March and the invoice still shows the old plan. Our team also cannot log in since the last update, and the dashboard shows an error when we open the reports page. ",
+    "pause_s": 0.5,
+    "warmup_calls": 0,
+    "sync_before_read": false,
+    "components": [
+      "embedding",
+      "L5.attn_norm",
+      "L5.attn",
+      "L5.mlp_norm",
+      "L5.mlp",
+      "L5.block",
+      "L6.attn_norm",
+      "L6.attn",
+      "L6.mlp_norm",
+      "L6.mlp",
+      "L6.block",
+      "final_norm",
+      "head0",
+      "head1",
+      "decision_head",
+      "encoder_cycled",
+      "full_model"
+    ],
+    "replay_inputs": "exact args/kwargs from a real forward pass"
+  },
+  "config_hash": "2d1790f6",
+  "status": "complete",
+  "started": "20261029-024759",
+  "finished": "20261029-042632"
+}
