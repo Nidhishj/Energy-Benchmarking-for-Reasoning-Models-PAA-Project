@@ -50,6 +50,7 @@ def parse_args():
                         "in a new run dir; seeds depend on the trial index, so it differs from trials 0-1)")
     p.add_argument("--limit", type=int, help="only the first n problems of the subset (speed check, dry runs)")
     p.add_argument("--problems", nargs="+", help="only these problem_ids")
+    p.add_argument("--subset", default=str(qwen.SUBSET), help="problem list (default: the fixed 30-problem subset)")
     p.add_argument("--no-zeus", action="store_true", help="skip the Zeus cross-check")
     p.add_argument("--no-checkpoints", action="store_true", help="no E(k) reads (to measure their overhead)")
     p.add_argument("--stop-at", help="local time HH:MM; no generation is started that would not finish before it")
@@ -86,7 +87,7 @@ def main():
     meter.strict = not a.allow_busy  # from here on, stop (GpuBusy) if another process appears
     print(f"GPU: {meter.name}", flush=True)
 
-    subset = qwen.load_subset()
+    subset = qwen.load_subset(Path(a.subset))
     problems = subset["problems"]
     if a.problems:
         problems = [p for p in problems if p["problem_id"] in set(a.problems)]
@@ -103,7 +104,7 @@ def main():
     print(f"  idle: {idle['mean_W']:.1f} W", flush=True)
 
     config = {
-        "dataset": subset["source"], "subset_selection": subset["selection"],
+        "dataset": subset["source"], "subset_selection": subset["selection"], "subset_file": Path(a.subset).name,
         "problem_ids": [p["problem_id"] for p in problems], "modes": a.modes, "T": T, "max_new_tokens": max_new,
         "decoding": {m: qwen.DECODING[m] for m in a.modes}, "instruction": qwen.MATH_INSTRUCTION,
         "dtype": a.dtype, "attn_impl": a.attn, "batch_size": 1, "zeus": window.zeus is not None,
