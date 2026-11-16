@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "run_id": "20261029-120545_Laya_multilingual_ours_gpu1_c1553edd",
+  "session_id": "20261029-120545_server_gpu1",
+  "experiment": "Laya_multilingual_ours",
+  "git_commit": "ba84c6f",
+  "git_dirty": true,
+  "command": "/scratch/nidhish/envs/energy/bin/python indic_models/run_laya.py --checkpoint multilingual --method ours --components embedding L5.attn_norm L5.attn L5.mlp_norm L5.mlp L5.block L6.attn_norm L6.attn L6.mlp_norm L6.mlp L6.block final_norm head0 head1 decision_head encoder_cycled full_model",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "convaiinnovations/laya/multilingual",
+    "local_path": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project/models/convaiinnovations--laya",
+    "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "laya_version": "0.4.17",
+    "class": "DecisionModel",
+    "encoder": "ModernBertModel",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 22,
+    "layer_types": [
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global",
+      "sliding",
+      "sliding",
+      "global"
+    ],
+    "sliding_window": 128,
+    "hidden_size": 768,
+    "n_params_M": 321.9
+  },
+  "config": {
+    "checkpoint": "multilingual",
+    "method": "ours",
+    "seq_lens": [
+      64,
+      128,
+      256,
+      512,
+      1024
+    ],
+    "layers": [
+      5,
+      6
+    ],
+    "T": 20,
+    "N_component": 10000,
+    "N_model": 1000,
+    "dtype": "bf16",
+    "batch_size": 1,
+    "question": {
+      "department": {
+        "type": "choice",
+        "instructions": "Which department should handle this?",
+        "criteria": {
+          "billing": "invoices, payments, refunds",
+          "technical": "bugs, outages, system errors",
+          "other": "everything else"
+        }
+      }
+    },
+    "text": "\u0928\u092e\u0938\u094d\u0924\u0947, \u092e\u093e\u0930\u094d\u091a \u092e\u0947\u0902 \u0939\u092e\u0938\u0947 \u0926\u094b \u092c\u093e\u0930 \u0936\u0941\u0932\u094d\u0915 \u0932\u093f\u092f\u093e \u0917\u092f\u093e \u0914\u0930 \u091a\u093e\u0932\u093e\u0928 \u092e\u0947\u0902 \u0905\u092c \u092d\u0940 \u092a\u0941\u0930\u093e\u0928\u093e \u092a\u094d\u0932\u093e\u0928 \u0926\u093f\u0916 \u0930\u0939\u093e \u0939\u0948\u0964 \u092a\u093f\u091b\u0932\u0947 \u0905\u092a\u0921\u0947\u091f \u0915\u0947 \u092c\u093e\u0926 \u0938\u0947 \u0939\u092e\u093e\u0930\u0940 \u091f\u0940\u092e \u0932\u0949\u0917 \u0907\u0928 \u0928\u0939\u0940\u0902 \u0915\u0930 \u092a\u093e \u0930\u0939\u0940 \u0939\u0948 \u0914\u0930 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u092a\u0947\u091c \u0916\u094b\u0932\u0928\u0947 \u092a\u0930 \u0924\u094d\u0930\u0941\u091f\u093f \u0906\u0924\u0940 \u0939\u0948\u0964 ",
+    "pause_s": 0.5,
+    "warmup_calls": 100,
+    "sync_before_read": true,
+    "components": [
+      "embedding",
+      "L5.attn_norm",
+      "L5.attn",
+      "L5.mlp_norm",
+      "L5.mlp",
+      "L5.block",
+      "L6.attn_norm",
+      "L6.attn",
+      "L6.mlp_norm",
+      "L6.mlp",
+      "L6.block",
+      "final_norm",
+      "head0",
+      "head1",
+      "decision_head",
+      "encoder_cycled",
+      "full_model"
+    ],
+    "replay_inputs": "exact args/kwargs from a real forward pass"
+  },
+  "config_hash": "c1553edd",
+  "status": "stopped",
+  "started": "20261029-120545",
+  "finished": "20261029-121753",
+  "note": "Stopped by hand on 2026-10-29: started without being asked (multilingual not needed for now). Partial data: 64 tokens only."
+}
