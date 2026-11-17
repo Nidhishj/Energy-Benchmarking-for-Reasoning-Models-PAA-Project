@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "run_id": "20261117-152101_A_decode_gpu1_21ae0d3c",
+  "session_id": "20261117-152101_server_gpu1",
+  "experiment": "A_decode",
+  "git_commit": "df5a4ca",
+  "git_dirty": true,
+  "command": "/scratch/nidhish/envs/energy/bin/python expa/run_decode_components.py --source results/runs/B2b_aime/20261117-000045_B2b_aime_gpu1_725358c0 --contexts 256 1024 2048 4096 8192 16384 32768",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "source_run": "20261117-000045_B2b_aime_gpu1_725358c0",
+    "problem_id": "aime2025/I-11",
+    "trace_trial": 0,
+    "prompt_len": 507,
+    "contexts": [
+      256,
+      1024,
+      2048,
+      4096,
+      8192,
+      16384,
+      32768
+    ],
+    "layer": 18,
+    "components": [
+      "input_norm",
+      "attention",
+      "post_norm",
+      "mlp",
+      "layer",
+      "embed",
+      "final_norm",
+      "lm_head",
+      "full_step"
+    ],
+    "T": 20,
+    "target_s": 2.0,
+    "pause_s": 0.5,
+    "warmup_calls": 100,
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "n_layers": 36,
+    "replay": "attention/layer: frozen cache (cat, no store); full_step: real DynamicCache + crop"
+  },
+  "config_hash": "21ae0d3c",
+  "status": "complete",
+  "started": "20261117-152101",
+  "finished": "20261117-161443"
+}
