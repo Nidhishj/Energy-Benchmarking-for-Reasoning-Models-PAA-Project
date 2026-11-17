@@ -49,6 +49,7 @@
     "think_energy": "E(k) checkpoint of the source generation (same GPU); cache rebuilt unmeasured"
   },
   "config_hash": "34f66e20",
-  "status": "running",
-  "started": "20261117-104542"
+  "status": "complete",
+  "started": "20261117-104542",
+  "finished": "20261117-135530"
 }
