@@ -119,6 +119,7 @@
     ]
   },
   "config_hash": "4d9566a3",
-  "status": "running",
-  "started": "20261117-000045"
+  "status": "complete",
+  "started": "20261117-000045",
+  "finished": "20261117-104503"
 }

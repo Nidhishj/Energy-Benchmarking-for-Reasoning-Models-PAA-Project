@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "run_id": "20261117-083259_Caps_aime_gpu1_0e93701e",
+  "session_id": "20261117-083259_server_gpu1",
+  "experiment": "Caps_aime",
+  "git_commit": "167163e",
+  "git_dirty": true,
+  "command": "/scratch/nidhish/envs/energy/bin/python expc/run_caps.py --source results/runs/B2b_aime/20261117-000045_B2b_aime_gpu1_725358c0/ --caps 2048 4096 8192 16384 --tag aime",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "source_run": "20261117-000045_B2b_aime_gpu1_725358c0",
+    "source_dir": "results/runs/B2b_aime/20261117-000045_B2b_aime_gpu1_725358c0",
+    "source_same_gpu": true,
+    "source_max_new_on": 32768,
+    "subset_file": "aime_subset.json",
+    "caps": [
+      2048,
+      4096,
+      8192,
+      16384
+    ],
+    "limit_answer": true,
+    "end_text": "\n</think>\n\n",
+    "end_ids": [
+      198,
+      151668,
+      271
+    ],
+    "max_answer": 4096,
+    "decoding": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20
+    },
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "zeus": true,
+    "grader": "math-verify",
+    "think_energy": "E(k) checkpoint of the source generation (same GPU); cache rebuilt unmeasured"
+  },
+  "config_hash": "0e93701e",
+  "status": "complete",
+  "started": "20261117-083259",
+  "finished": "20261117-111235"
+}

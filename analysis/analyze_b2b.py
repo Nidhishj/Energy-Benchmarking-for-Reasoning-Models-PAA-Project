@@ -19,13 +19,14 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("run_dirs", nargs="+")
     p.add_argument("--out", default="B2b_summary")
+    p.add_argument("--dataset", default="MATH500")
     a = p.parse_args()
     rows = load_runs(a.run_dirs)
     rows["E_J"] = (rows.E_end_mJ - rows.E_start_mJ) / 1000
     rows["E_idle_sub_J"] = rows.E_J - rows.idle_W * rows.dur_s
     rows["mJ_per_tok"] = 1000 * rows.E_J / rows.output_len.clip(lower=1)
 
-    md = ["# B2b: Qwen3 on MATH500, thinking on vs off", "", f"Runs: {', '.join(Path(d).name for d in a.run_dirs)}", ""]
+    md = [f"# B2b: Qwen3 on {a.dataset}, thinking on vs off", "", f"Runs: {', '.join(Path(d).name for d in a.run_dirs)}", ""]
     for gpu, g in rows.groupby("gpu"):
         md += [f"## {gpu}", "",
                "| Mode | Rows | Problems | Accuracy | Output tok | Thinking tok | Answer tok | J/query | "
