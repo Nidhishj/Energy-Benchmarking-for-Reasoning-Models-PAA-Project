@@ -19,6 +19,35 @@ length: on AIME, wrong thinking-on answers have median ~28k tokens vs ~10.5k for
 tokens fall where attention dominates. Runs 1–2 below test the "regardless of which trace" part; the per-answer
 split is then computed offline (no GPU).
 
+## Quick start: one script per GPU
+
+```bash
+git pull --ff-only
+mkdir -p results/logs
+# both GPUs, until 21:30:
+CUDA_VISIBLE_DEVICES=1 setsid nohup scripts/run_eval2_ada.sh gpu1 21:30 > results/logs/eval2_gpu1.out 2>&1 < /dev/null &
+CUDA_VISIBLE_DEVICES=0 setsid nohup scripts/run_eval2_ada.sh gpu0 21:30 > results/logs/eval2_gpu0.out 2>&1 < /dev/null &
+# only one GPU: everything in priority order on it
+CUDA_VISIBLE_DEVICES=1 setsid nohup scripts/run_eval2_ada.sh all 21:30 > results/logs/eval2_all.out 2>&1 < /dev/null &
+```
+
+`scripts/run_eval2_ada.sh` runs the queues below in order, skips a step that would not finish before the stop time,
+lets the n200 reruns stop themselves at it, and writes the Exp A/B tables at the end. Rerun the same command
+later: finished steps are skipped, a stopped one resumes. `DRY_RUN=1` prints the plan without touching the GPU.
+
+### With a 6-hour allocation
+
+| Allocation | What finishes in 6 h | Left for later |
+|---|---|---|
+| **Both GPUs** | GPU 1: runs 1–4 (~3.4 h). GPU 0: Exp A repeat (~1 h), thinking-off reruns (≤ 1 h), then ~4 h of the 32k reruns (roughly half of the 29) | The rest of the 32k reruns |
+| **One GPU** (`all`) | Runs 1–5 (~4.4 h) and the thinking-off reruns (≤ 1 h) | All of the 32k reruns (needs another ~5–8 h) |
+
+Either way, everything Eval 2 needs (Exp B equal-t check, thinking-off check, layer check, Exp A repeat) fits in
+6 h. Only the n200 thinking-on reruns don't: until they finish, report n200 thinking on with the 29 capped
+answers marked, as now.
+
+The commands below are what the script runs, for running a step by hand.
+
 ## Before starting
 
 - Pull the commit that adds `--mode` to `expa/run_decode_components.py` (needed for run 3).
@@ -33,6 +62,7 @@ mkdir -p results/logs
 
 ## GPU 1 queue (~3.5 h): Exp B and checks on the GPU that measured Exp A
 
+The script runs them in the order 1, 3, 4, 2: the second wrong trace goes last as the least critical.
 All on GPU 1 so the comparison with the existing `I-11` run is within one card (the two Ada cards differ by ~8–10%).
 Same settings as the Exp A run (T = 20, ~2 s trials, layer 18). Contexts above a trace's length are skipped
 automatically.

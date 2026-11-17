@@ -7,6 +7,27 @@ baselines, and gives a second GPU for Exp A/B. Companion plan: `eval2_rtx6000ada
 The session length is not known yet, so **the steps are in priority order**: each one is useful on its own; stop
 wherever time runs out. Steps 1–4 need ~3.5 h. Stop GPU work 15 min before the session ends to copy results.
 
+## Quick start: one script
+
+```bash
+cd /data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project && git pull --ff-only
+tmux new -s eval2                      # if allowed; otherwise keep this SSH session open
+scripts/run_eval2_pro5000.sh 17:45     # 17:45 = when GPU work must stop (15 min before the session ends)
+```
+
+`scripts/run_eval2_pro5000.sh` runs steps 1–5 below in order and then writes the analysis tables. It:
+- skips a step that would not finish before the stop time (estimates are printed), and moves on to smaller ones;
+- stops after step 1 if the repro gate fails (`analysis/compare_repro.py`; `IGNORE_REPRO=1` overrides);
+- after a dropped connection, rerun the same command: finished steps are skipped, a stopped one resumes;
+- `DRY_RUN=1 scripts/run_eval2_pro5000.sh 17:45` prints the plan without touching the GPU.
+
+| Session length | What finishes |
+|---|---|
+| 4 h | Steps 1–4 (~3.6 h): repro, Exp A, Exp B correct trace, thinking-off and layer checks |
+| 6 h | Steps 1–4, then Exp C (~1.5–2 h on this card) |
+
+The sections below are the same steps by hand.
+
 ## Setup (T+0:00, ~10 min)
 
 ```bash
@@ -84,7 +105,7 @@ $PY -u expa/run_decode_components.py --source $AIME --problem aime2025/I-11 --tr
 Gates: thinking-off tokens cost the same as thinking-on tokens at equal context (within ~5%); layers 0 and 35
 within ~5% of layer 18.
 
-## 5. Optional, if ≥ 3 h remain: Exp C on the Eval 1 traces (~2–3 h)
+## 5. Optional: Exp C on the Eval 1 traces (~1.5–2 h)
 
 Reproduces the MATH "cut thinking short" result on the baseline card, from this card's own Eval 1 thinking-on
 traces (30 problems × 2 trials, 6 hit the token limit and are skipped). The same run on the Ada took 4 h for
@@ -97,7 +118,8 @@ $PY analysis/analyze_expc.py results/runs/C/<new run> \
     --off results/runs/B2b/20261017-193728_B2b_gpu0_ba965317 --out C_pro5000
 ```
 
-`--stop-at` = 15 min before the session ends; continue later with `--resume`. The thinking-off comparison uses the
+`--stop-at` = 15 min before the session ends; continue later with `--resume`. The script starts this step when
+≥ 30 min remain and lets `--stop-at` end it. The thinking-off comparison uses the
 October thinking-off answers from the same run.
 
 ## Not on this card
