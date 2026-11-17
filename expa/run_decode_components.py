@@ -51,6 +51,7 @@ def parse_args():
     p.add_argument("--source", required=True, help="B2b run dir with saved thinking-on traces")
     p.add_argument("--problem", help="problem_id of the trace (default: the longest thinking-on trace)")
     p.add_argument("--trial", type=int)
+    p.add_argument("--mode", choices=["on", "off"], default="on", help="thinking mode of the trace")
     p.add_argument("--contexts", type=int, nargs="+", default=[256, 1024, 2048, 4096, 8192, 16384, 32768])
     p.add_argument("--layer", type=int, default=18)
     p.add_argument("--components", nargs="+", default=COMPONENTS)
@@ -71,16 +72,16 @@ def parse_args():
     return p.parse_args()
 
 
-def pick_trace(src: Path, problem: str | None, trial: int | None) -> dict:
+def pick_trace(src: Path, problem: str | None, trial: int | None, mode: str = "on") -> dict:
     best = None
     for line in open(src / "traces.jsonl"):
         t = json.loads(line)
-        if t["mode"] != "on" or (problem and t["problem_id"] != problem) or (trial is not None and t["trial"] != trial):
+        if t["mode"] != mode or (problem and t["problem_id"] != problem) or (trial is not None and t["trial"] != trial):
             continue
         if best is None or len(t["output_ids"]) > len(best["output_ids"]):
             best = t
     if best is None:
-        sys.exit("No matching thinking-on trace")
+        sys.exit(f"No matching thinking-{mode} trace")
     return best
 
 
@@ -157,7 +158,7 @@ def main():
     if not torch.cuda.is_available():
         sys.exit("CUDA not available")
     src = Path(a.source)
-    tr = pick_trace(src, a.problem, a.trial)
+    tr = pick_trace(src, a.problem, a.trial, a.mode)
     ids = tr["prompt_ids"] + tr["output_ids"]
     contexts = [L for L in a.contexts if L < len(ids)]
     if len(contexts) < len(a.contexts):
@@ -177,7 +178,8 @@ def main():
     print(f"  idle: {idle['mean_W']:.1f} W", flush=True)
 
     config = {"source_run": json.loads((src / "run.json").read_text())["run_id"], "problem_id": tr["problem_id"],
-              "trace_trial": tr["trial"], "prompt_len": len(tr["prompt_ids"]), "contexts": contexts,
+              "trace_mode": tr["mode"], "trace_trial": tr["trial"], "prompt_len": len(tr["prompt_ids"]),
+              "contexts": contexts,
               "layer": a.layer, "components": a.components, "T": a.T, "target_s": a.target_s,
               "pause_s": a.pause_s, "warmup_calls": a.warmup_calls, "dtype": a.dtype, "attn_impl": a.attn,
               "batch_size": 1, "n_layers": model.config.num_hidden_layers,
