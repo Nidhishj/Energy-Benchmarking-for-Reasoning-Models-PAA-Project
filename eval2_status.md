@@ -1,7 +1,8 @@
 # Eval 2 status (2026-11-18)
 
 What has been run for Evaluation 2 ("Working Prototype"), what it showed, and what is still open. Run plans:
-`eval2_rtxpro5000_plan.md`, `eval2_rtx6000ada_plan.md`.
+`eval2_rtxpro5000_plan.md`, `eval2_rtx6000ada_plan.md`; run scripts: `scripts/run_eval2_pro5000.sh`,
+`scripts/run_eval2_ada.sh` (shared helpers in `scripts/eval2_lib.sh`, repro gate in `analysis/compare_repro.py`).
 
 ## Done
 
@@ -77,8 +78,6 @@ So measuring layer 18 and multiplying by 36 is justified.
 - **Per-answer component split on the PRO 5000** (Exp A cost curve × token counts of the saved answers): done for
   the Ada only.
 - **Eval 2 slides/report**: not started.
-- **Run scripts** (`scripts/run_eval2_pro5000.sh`, `scripts/run_eval2_ada.sh`, `scripts/eval2_lib.sh`,
-  `analysis/compare_repro.py`) that produced these runs are not on `main` yet.
 - **Server repo** (`/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project`): `git pull` is
   blocked by uncommitted edits left from October (B3/B2b tables and figures); today's code was copied in from a
   local clone instead. Clean it up at the start of the next slot (`git stash -u && git pull --ff-only`).
