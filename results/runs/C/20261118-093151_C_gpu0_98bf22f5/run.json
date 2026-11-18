@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "run_id": "20261118-093151_C_gpu0_98bf22f5",
+  "session_id": "20261118-093151_server_gpu0",
+  "experiment": "C",
+  "git_commit": "b40e2b4",
+  "git_dirty": true,
+  "command": "/data/cs3406/team02/envs/energy/bin/python expc/run_expc.py --source results/runs/B2b/20261017-193728_B2b_gpu0_ba965317 --stop-at 11:45",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "source_run": "20261017-193728_B2b_gpu0_ba965317",
+    "source_dir": "results/runs/B2b/20261017-193728_B2b_gpu0_ba965317",
+    "source_model": "Qwen/Qwen3-8B",
+    "pct": [
+      25,
+      50,
+      75
+    ],
+    "abs": [
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "end_text": "\n</think>\n\n",
+    "end_ids": [
+      198,
+      151668,
+      271
+    ],
+    "max_answer": 2048,
+    "decoding": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20
+    },
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "zeus": true,
+    "grader": "math-verify",
+    "think_energy": "teacher-forced replay of saved tokens, one forward per token, counter read at each b",
+    "skipped_capped": [
+      [
+        "test/intermediate_algebra/754.json",
+        0
+      ],
+      [
+        "test/number_theory/417.json",
+        0
+      ],
+      [
+        "test/intermediate_algebra/2196.json",
+        0
+      ],
+      [
+        "test/geometry/880.json",
+        0
+      ],
+      [
+        "test/number_theory/417.json",
+        1
+      ],
+      [
+        "test/geometry/880.json",
+        1
+      ]
+    ]
+  },
+  "config_hash": "98bf22f5",
+  "status": "stopped",
+  "started": "20261118-093151",
+  "resumed_in_sessions": [
+    "20261118-112454_server_gpu0"
+  ],
+  "finished": "20261118-114002"
+}
