@@ -2,7 +2,8 @@
 
 Per mode: accuracy, token counts, energy per query/token/correct answer, token-cap rate, trial-to-trial spread,
 NVML-vs-Zeus agreement, and the paired on/off energy ratio. Several run dirs (e.g. a run continued with --resume in a
-second slot, or a second GPU) can be given; rows are grouped by GPU.
+second slot, or a second GPU) can be given; rows are grouped by GPU. With --replace, a later run's row replaces an
+earlier run's row for the same (problem, mode, trial), e.g. reruns of token-capped answers at a higher limit.
 
 Usage: python analysis/analyze_b2b.py results/runs/B2b/<run_id> [more run dirs]
 """
@@ -20,8 +21,14 @@ def main():
     p.add_argument("run_dirs", nargs="+")
     p.add_argument("--out", default="B2b_summary")
     p.add_argument("--dataset", default="MATH500")
+    p.add_argument("--replace", action="store_true",
+                   help="later run dirs replace earlier rows with the same (problem_id, mode, trial)")
     a = p.parse_args()
     rows = load_runs(a.run_dirs)
+    if a.replace:
+        n = len(rows)
+        rows = rows.drop_duplicates(["problem_id", "mode", "trial"], keep="last").reset_index(drop=True)
+        print(f"--replace: {n - len(rows)} rows replaced by later runs")
     rows["E_J"] = (rows.E_end_mJ - rows.E_start_mJ) / 1000
     rows["E_idle_sub_J"] = rows.E_J - rows.idle_W * rows.dur_s
     rows["mJ_per_tok"] = 1000 * rows.E_J / rows.output_len.clip(lower=1)

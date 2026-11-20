@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "run_id": "20261118-204428_B2b_n200_8k_off_gpu0_04ee8b31",
+  "session_id": "20261118-204428_server_gpu0",
+  "experiment": "B2b_n200_8k_off",
+  "git_commit": "bf9627e",
+  "git_dirty": true,
+  "command": "/scratch/nidhish/envs/energy/bin/python b2/run_b2b.py --subset configs/math500_subset200.json --modes off --T-off 1 --max-new-off 8192 --problems test/intermediate_algebra/362.json test/intermediate_algebra/1779.json test/intermediate_algebra/90.json test/precalculus/1313.json test/intermediate_algebra/345.json test/geometry/880.json test/geometry/229.json test/intermediate_algebra/158.json test/geometry/172.json test/intermediate_algebra/2022.json test/counting_and_probability/1003.json test/intermediate_algebra/582.json test/intermediate_algebra/1806.json test/counting_and_probability/181.json test/intermediate_algebra/1279.json --tag n200_8k_off",
+  "cwd": "/scratch/nidhish/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "dataset": "HuggingFaceH4/MATH-500 (test split)",
+    "subset_selection": "40 per level (1-5), random.Random(1).sample over problems sorted by unique_id; keeps all problems of configs/math500_subset.json and samples the rest from the others",
+    "subset_file": "math500_subset200.json",
+    "problem_ids": [
+      "test/intermediate_algebra/362.json",
+      "test/intermediate_algebra/1779.json",
+      "test/intermediate_algebra/90.json",
+      "test/precalculus/1313.json",
+      "test/intermediate_algebra/345.json",
+      "test/geometry/880.json",
+      "test/geometry/229.json",
+      "test/intermediate_algebra/158.json",
+      "test/geometry/172.json",
+      "test/intermediate_algebra/2022.json",
+      "test/counting_and_probability/1003.json",
+      "test/intermediate_algebra/582.json",
+      "test/intermediate_algebra/1806.json",
+      "test/counting_and_probability/181.json",
+      "test/intermediate_algebra/1279.json"
+    ],
+    "modes": [
+      "off"
+    ],
+    "T": {
+      "on": 2,
+      "off": 1
+    },
+    "max_new_tokens": {
+      "on": 8192,
+      "off": 8192
+    },
+    "decoding": {
+      "off": {
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20
+      }
+    },
+    "instruction": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "zeus": true,
+    "checkpoints": "1,2,4,...,512 then every 512",
+    "grader": "math-verify",
+    "order": "mode, then trial, then problem"
+  },
+  "config_hash": "04ee8b31",
+  "status": "complete",
+  "started": "20261118-204428",
+  "finished": "20261118-211509"
+}
