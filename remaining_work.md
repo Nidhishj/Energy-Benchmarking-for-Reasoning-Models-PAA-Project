@@ -138,5 +138,6 @@ Legend: ✅ done · 🟡 partly done · ❌ not started
 
 ### 3.2 Other architectures and hardware (separate plans)
 - `plan_ssm_hybrid.md`: Mamba / SSM and hybrid reasoning models (Nemotron-Nano-9B-v2 vs Qwen3-8B, Phi-4-mini-flash vs Phi-4-mini). Does the flat per-token cost of SSM layers remove the expensive long-context tail?
-- `plan_jepa.md`: JEPA models. V-JEPA 2 (official Meta weights on Hugging Face) component energy vs video length; LLM-JEPA and VL-JEPA if their weights are available.
+- `jev.md`: **Jev and open "System One" decision models** (Kev, JEV-9B, Jeff 1.1, Jeva, Laya, pplx-decider). One forward pass and no decoding. Energy per decision vs generating the decision with Qwen3-8B (thinking on/off), and the component split of the single pass. No energy measurements exist except our October Laya run.
+- `plan_jepa.md`: JEPA models (V-JEPA 2 etc.). Side idea only; it came from a misreading of "Jev".
 - `plan_systolic.md`: the same decode workloads on a simulated systolic-array accelerator (SCALE-Sim v3 + Accelergy), checked against our measured GPU component shares.

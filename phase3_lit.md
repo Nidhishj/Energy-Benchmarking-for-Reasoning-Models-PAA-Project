@@ -1,6 +1,6 @@
 # Phase 3 reading list: only the important papers
 
-Short list for the work after Eval 2 (`remaining_work.md`, `plan_ssm_hybrid.md`, `plan_jepa.md`, `plan_systolic.md`).
+Short list for the work after Eval 2 (`remaining_work.md`, `plan_ssm_hybrid.md`, `jev.md`, `plan_systolic.md`).
 - About 20 papers, in reading order within each topic.
 - ★ = read in full; the others need only abstract, method and main figure.
 - The notes come from abstracts and search snippets (2026-11-27). Check numbers in the paper before citing them.
@@ -43,7 +43,18 @@ Already known from Phase 1–2, so not repeated:
 | | **M1: Towards Scalable Test-Time Compute with Mamba Reasoning Models** ([2504.10449](https://arxiv.org/abs/2504.10449)) | Mamba reasoning model, >3× generation speed vs a same-size transformer | Optional third model pair; their memory-bound decoding argument |
 | | **Phi-4-mini-flash-reasoning** (SambaY; Microsoft model card and paper) | Hybrid with a same-family transformer twin (Phi-4-mini-reasoning) | The cleanest architecture A/B; Mamba-1 vs Mamba-2 choice |
 
-## D. JEPA (`plan_jepa.md`)
+## D. Jev and System One decision models (`jev.md`)
+
+| | Paper | Why read it | What to take for us |
+|---|---|---|---|
+| ★ | **Releasing the Inner Jev: A Simple Recipe for Open Decision Models** (Jeff 1.1, [2610.17205](https://arxiv.org/html/2610.17205)) | Open recipe: backbone + LoRA + decision head, one forward pass; latency tables vs the Jev API | How the decision head works, which checkpoints to use, their optional ≤512-token reasoning mode (V3) |
+| ★ | **HF Transformers `JevForDecision` docs** ([link](https://huggingface.co/docs/transformers/en/model_doc/jev)) and the **JEV-9B model card** ([link](https://huggingface.co/autotrust/JEV-9B)) | Exact input format, head, readout position | What to hook for CLEAR (V2); setup for V0 |
+| ★ | **General Decision Models: Benchmarking and Insights Beyond Jev** ([2610.03935](https://arxiv.org/html/2610.03935v2)) | Accuracy of Jev vs open models (Kev, Laya, …) | Which open models are worth measuring |
+| | **DecideBench** ([GitHub](https://github.com/choyiny/decidebench)) | Decision models vs LLMs: accuracy, cost per task, latency | A ready task set for V1; we add joules |
+| | **Jeva** ([2610.18773](https://arxiv.org/html/2610.18773)) | Decision-native architecture with cacheable option encodings | An alternative design to compare in V2 |
+| | **Introducing Kev** ([blog](https://jaredpalmer.com/blog/introducing-kev)) | The main open Jev alternative (0.8B–27B, Qwen bases, Apache-2.0) | Model sizes and API; check the exact release |
+
+## D2. JEPA (`plan_jepa.md`, side idea only)
 
 | | Paper | Why read it | What to take for us |
 |---|---|---|---|
@@ -66,5 +77,5 @@ Already known from Phase 1–2, so not repeated:
 1. **Stopping:** survey 2611.00166 → 2504.05419 → EAT/DEER → 2606.30852 (needed for E1/E2).
 2. **SSM:** Mamba → Nemotron Nano 2 → 2507.12442 (needed before the first hybrid run).
 3. **Energy methodology:** *Where Do the Joules Go?* (for the related-work section).
-4. **JEPA:** V-JEPA 2 → LLM-JEPA (before J0/J1).
+4. **Jev:** Jeff 1.1 (2610.17205) → HF JevForDecision docs → General Decision Models (before V0–V2).
 5. **Systolic:** SCALE-Sim v3 → LLMCompass (before Y1).
