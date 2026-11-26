@@ -135,3 +135,8 @@ Legend: ✅ done · 🟡 partly done · ❌ not started
 - *Conformal Thinking* (2602.03814)
 - *When More Thinking Hurts* (2604.10739)
 - *EcoThink* (2603.25498) (energy-budgeted reasoning)
+
+### 3.2 Other architectures and hardware (separate plans)
+- `plan_ssm_hybrid.md`: Mamba / SSM and hybrid reasoning models (Nemotron-Nano-9B-v2 vs Qwen3-8B, Phi-4-mini-flash vs Phi-4-mini). Does the flat per-token cost of SSM layers remove the expensive long-context tail?
+- `plan_jepa.md`: JEPA models. V-JEPA 2 (official Meta weights on Hugging Face) component energy vs video length; LLM-JEPA and VL-JEPA if their weights are available.
+- `plan_systolic.md`: the same decode workloads on a simulated systolic-array accelerator (SCALE-Sim v3 + Accelergy), checked against our measured GPU component shares.
