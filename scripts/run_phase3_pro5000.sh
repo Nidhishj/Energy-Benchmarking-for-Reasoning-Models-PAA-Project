@@ -7,6 +7,7 @@
 #   3. Exp A same-session baseline, then the KV cache written in place (replay and live)
 #   4. attention kernel: eager; measurement fixes: no sync, layers cycled; SDPA kernels forced one at a time
 #   5. Exp B: correct vs wrong answers to the same AIME question (5 pairs), then 2 more thinking-off traces
+#   6. optional: stopping signals (forced short answers every 1k tokens) for the energy-aware stopping rules
 #
 # Usage, from the repo root (keep the SSH session open):
 #   scripts/run_phase3_pro5000.sh 11:45
@@ -101,6 +102,10 @@ for p in aime2025/II-15 aime2024/II-3; do
     run_step A_decode_Boff_${s} 7 $EXPA --source $AIME1 --problem $p --trial 0 --mode off \
         --contexts 1024 4096 8192 --components attention mlp full_step $T10 --tag Boff_${s}
 done
+
+# 6. Optional: stopping signals every 1k thinking tokens on all 120 AIME traces (~50 min; stops itself at STOP and
+#    resumes on the next call; the signals do not depend on the GPU, so the rest can be finished on the Ada)
+run_step Probe_signals 15 $PY -u expc/run_probe_signals.py --source $AIME1 $AIME0 --stop-at "$STOP"
 
 summary
 echo "Results are copied back to the Mac by the launcher; analysis runs there."
