@@ -14,6 +14,14 @@ real DynamicCache and crops it back to L after each call (crop only drops a view
 Components: input_norm, attention, post_norm, mlp, layer (one decoder layer), embed, final_norm, lm_head,
 full_step (model forward for one token with logits for that token, i.e. one decode step without sampling).
 
+Ablations (Phase 3):
+  --cache inplace       KV cache written in place (llm/inplace_cache.py) instead of torch.cat every step
+  --sdpa-backend X      force one SDPA kernel (flash / efficient / math / cudnn); --attn eager for no SDPA at all
+  --no-sync             counter read without syncing the GPU first
+  --cycle-layers        replay input_norm/attention/post_norm/mlp/layer over all 36 layers in model order (each with
+                        its own captured inputs and cache) instead of one layer N times; energy per call is then the
+                        mean over layers
+
 Usage:
   CUDA_VISIBLE_DEVICES=1 python expa/run_decode_components.py --source results/runs/B2b_aime/<run> \
       --problem aime2024/II-3 --contexts 256 1024 2048 4096 8192 16384 32768
@@ -32,6 +40,7 @@ from transformers import DynamicCache
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from energy import GpuBusy, Recorder, clear_measure, get_meter  # noqa: E402
 from llm import qwen  # noqa: E402
+from llm.inplace_cache import FrozenInplace, InplaceCache  # noqa: E402
 
 COMPONENTS = ["input_norm", "attention", "post_norm", "mlp", "layer", "embed", "final_norm", "lm_head", "full_step"]
 
@@ -63,6 +72,13 @@ def parse_args():
     p.add_argument("--model-id", default="Qwen/Qwen3-8B")
     p.add_argument("--dtype", choices=qwen.DTYPES, default="bf16")
     p.add_argument("--attn", default="sdpa")
+    p.add_argument("--cache", choices=["dynamic", "inplace"], default="dynamic",
+                   help="KV cache: transformers' DynamicCache (torch.cat each step) or written in place")
+    p.add_argument("--sdpa-backend", choices=["flash", "efficient", "math", "cudnn"],
+                   help="force one SDPA kernel (default: PyTorch chooses)")
+    p.add_argument("--no-sync", action="store_true", help="read the energy counter without syncing the GPU")
+    p.add_argument("--cycle-layers", action="store_true",
+                   help="replay per-layer components over all layers in order instead of one layer N times")
     p.add_argument("--prefill-chunk", type=int, default=8192)
     p.add_argument("--idle-s", type=float, default=30.0)
     p.add_argument("--allow-busy", action="store_true")
@@ -86,9 +102,15 @@ def pick_trace(src: Path, problem: str | None, trial: int | None, mode: str = "o
 
 
 @torch.inference_mode()
-def capture(model, ids_L: list[int], next_id: int, L: int, layer: int, chunk: int, device: str):
-    """Real cache for ids_L, then one real decode step for next_id with hooks. Returns (cache, captured inputs)."""
-    cache = DynamicCache()
+def capture(model, ids_L: list[int], next_id: int, L: int, layer: int, chunk: int, device: str,
+            cache_kind: str = "dynamic", all_layers: bool = False):
+    """Real cache for ids_L, then one real decode step for next_id with hooks. Returns (cache, captured inputs).
+
+    With all_layers, the per-layer modules of every layer are captured too, under "<name>@<layer index>"."""
+    if cache_kind == "inplace":
+        cache = InplaceCache(model.config.num_hidden_layers, L + 16)
+    else:
+        cache = DynamicCache()
     for i in range(0, L, chunk):
         model(input_ids=torch.tensor([ids_L[i:i + chunk]], device=device), past_key_values=cache, use_cache=True,
               logits_to_keep=1)
@@ -100,10 +122,14 @@ def capture(model, ids_L: list[int], next_id: int, L: int, layer: int, chunk: in
             got[name] = (args, dict(kwargs))
         return hook
 
-    hs = [m.register_forward_pre_hook(grab(n), with_kwargs=True) for n, m in [
-        ("layer", lay), ("input_norm", lay.input_layernorm), ("attention", lay.self_attn),
-        ("post_norm", lay.post_attention_layernorm), ("mlp", lay.mlp), ("final_norm", model.model.norm),
-        ("lm_head", model.lm_head)]]
+    mods = [("layer", lay), ("input_norm", lay.input_layernorm), ("attention", lay.self_attn),
+            ("post_norm", lay.post_attention_layernorm), ("mlp", lay.mlp), ("final_norm", model.model.norm),
+            ("lm_head", model.lm_head)]
+    if all_layers:
+        for li, ly in enumerate(model.model.layers):
+            mods += [(f"layer@{li}", ly), (f"input_norm@{li}", ly.input_layernorm), (f"attention@{li}", ly.self_attn),
+                     (f"post_norm@{li}", ly.post_attention_layernorm), (f"mlp@{li}", ly.mlp)]
+    hs = [m.register_forward_pre_hook(grab(n), with_kwargs=True) for n, m in mods]
     step_in = {"input_ids": torch.tensor([[next_id]], device=device),
                "cache_position": torch.tensor([L], device=device)}
     model(**step_in, past_key_values=cache, use_cache=True, logits_to_keep=1)
@@ -114,10 +140,11 @@ def capture(model, ids_L: list[int], next_id: int, L: int, layer: int, chunk: in
     return cache, got, step_in
 
 
-def make_fns(model, cache, got, step_in, layer: int) -> dict:
+def make_fns(model, cache, got, step_in, layer: int, cache_kind: str = "dynamic", cycle: bool = False) -> dict:
     lay = model.model.layers[layer]
+    Frozen = FrozenInplace if cache_kind == "inplace" else FrozenCache
     K, V = cache.layers[layer].keys, cache.layers[layer].values
-    frozen = FrozenCache(K, V)
+    frozen = Frozen(K, V)
 
     a_args, a_kw = got["attention"]
     a_kw = {**a_kw, "past_key_values": frozen}
@@ -138,7 +165,43 @@ def make_fns(model, cache, got, step_in, layer: int) -> dict:
         "final_norm": lambda: model.model.norm(*got["final_norm"][0]),
         "lm_head": lambda: model.lm_head(*got["lm_head"][0]),
         "full_step": full_step,
+        **(cycled_fns(model, cache, got, Frozen) if cycle else {}),
     }
+
+
+def cycled_fns(model, cache, got, Frozen) -> dict:
+    """Per-layer components replayed over all layers in model order: call i runs layer i % n_layers with that layer's
+    own captured inputs (and its own frozen cache for attention / layer)."""
+    n = len(model.model.layers)
+    calls = {c: [] for c in ("input_norm", "attention", "post_norm", "mlp", "layer")}
+    for li, ly in enumerate(model.model.layers):
+        fr = Frozen(cache.layers[li].keys, cache.layers[li].values)
+        a_args, a_kw = got[f"attention@{li}"]
+        l_args, l_kw = got[f"layer@{li}"]
+        calls["input_norm"].append(lambda ly=ly, x=got[f"input_norm@{li}"][0]: ly.input_layernorm(*x))
+        calls["attention"].append(lambda ly=ly, x=a_args, kw={**a_kw, "past_key_values": fr}: ly.self_attn(*x, **kw))
+        calls["post_norm"].append(lambda ly=ly, x=got[f"post_norm@{li}"][0]: ly.post_attention_layernorm(*x))
+        calls["mlp"].append(lambda ly=ly, x=got[f"mlp@{li}"][0]: ly.mlp(*x))
+        calls["layer"].append(lambda ly=ly, x=l_args, kw={**l_kw, "past_key_values": fr}: ly(*x, **kw))
+
+    def cycler(fs):
+        state = [0]
+
+        def fn():
+            out = fs[state[0]]()
+            state[0] = (state[0] + 1) % n
+            return out
+        return fn
+
+    return {c: cycler(fs) for c, fs in calls.items()}
+
+
+def set_sdpa_backend(name: str | None):
+    """Allow only SDPA kernel `name` (None: all, PyTorch chooses). Applied only while measuring: the chunked prefill
+    in capture() passes a mask, which the flash kernel does not accept."""
+    want = {"efficient": "mem_efficient"}.get(name, name)
+    for k in ("flash", "mem_efficient", "math", "cudnn"):
+        getattr(torch.backends.cuda, f"enable_{k}_sdp")(name is None or k == want)
 
 
 def time_per_call(fn, meter, n: int = 50) -> float:
@@ -183,7 +246,11 @@ def main():
               "layer": a.layer, "components": a.components, "T": a.T, "target_s": a.target_s,
               "pause_s": a.pause_s, "warmup_calls": a.warmup_calls, "dtype": a.dtype, "attn_impl": a.attn,
               "batch_size": 1, "n_layers": model.config.num_hidden_layers,
-              "replay": "attention/layer: frozen cache (cat, no store); full_step: real DynamicCache + crop"}
+              "cache": a.cache, "sdpa_backend": a.sdpa_backend, "sync": not a.no_sync, "cycle_layers": a.cycle_layers,
+              "replay": ("attention/layer: frozen cache (cat, no store); full_step: real DynamicCache + crop"
+                         if a.cache == "dynamic" else
+                         "attention/layer: frozen in-place buffer (write slot L, no store); full_step: InplaceCache + crop")
+              + ("; per-layer components cycled over all layers" if a.cycle_layers else "")}
     experiment = "A_decode" + (f"_{a.tag}" if a.tag else "")
     rec = Recorder(experiment, config, qwen.model_info(model, a.model_id, a.model, a.dtype), meter, idle,
                    resume_dir=a.resume)
@@ -196,16 +263,25 @@ def main():
             todo_c = [c for c in a.components if any((L, c, t) not in done for t in range(a.T))]
             if not todo_c:
                 continue
-            cache, got, step_in = capture(model, ids[:L], ids[L], L, a.layer, a.prefill_chunk, a.device)
-            fns = make_fns(model, cache, got, step_in, a.layer)
+            set_sdpa_backend(None)
+            cache, got, step_in = capture(model, ids[:L], ids[L], L, a.layer, a.prefill_chunk, a.device,
+                                          a.cache, a.cycle_layers)
+            fns = make_fns(model, cache, got, step_in, a.layer, a.cache, a.cycle_layers)
             print(f"\n== context {L} (cache {cache.get_seq_length()} tokens) ==", flush=True)
+            set_sdpa_backend(a.sdpa_backend)
             for comp in todo_c:
                 todo = [t for t in range(a.T) if (L, comp, t) not in done]
-                t_call = time_per_call(fns[comp], meter)
+                try:
+                    t_call = time_per_call(fns[comp], meter)
+                except RuntimeError as e:  # a forced SDPA kernel that cannot run these inputs
+                    print(f"  {comp:10s} cannot run: {str(e).splitlines()[0][:200]}", flush=True)
+                    rec.write({"experiment": experiment, "method": "error", "context": L, "layer": a.layer,
+                               "component": comp, "trial": -1, "error": str(e)[:2000]})
+                    continue
                 N = max(10, math.ceil(a.target_s / t_call))
                 vals = []
                 for i, row in enumerate(clear_measure(fns[comp], meter, N=N, T=len(todo), pause_s=a.pause_s,
-                                                      warmup_calls=a.warmup_calls)):
+                                                      warmup_calls=a.warmup_calls, sync=not a.no_sync)):
                     row["trial"] = todo[i]
                     rec.write({"experiment": experiment, "method": "clear", "context": L, "layer": a.layer,
                                "component": comp, "t_call_probe_s": t_call, **row})

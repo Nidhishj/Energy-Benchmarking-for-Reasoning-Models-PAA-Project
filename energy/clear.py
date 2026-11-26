@@ -20,8 +20,12 @@ def clear_measure(
     T: int,
     pause_s: float = 0.5,
     warmup_calls: int = 100,
+    sync: bool = True,
 ) -> Iterator[dict]:
-    """Yield one raw row per trial: E_start/E_end (mJ), t_start/t_end (s), N, GPU state and other processes."""
+    """Yield one raw row per trial: E_start/E_end (mJ), t_start/t_end (s), N, GPU state and other processes.
+
+    sync=False reads the counter without syncing the GPU first (the measurement-fix ablation: queued work at the end
+    of a trial is then not counted)."""
     with torch.inference_mode():
         for _ in range(warmup_calls):
             fn()
@@ -30,10 +34,10 @@ def clear_measure(
         for trial in range(T):
             time.sleep(pause_s)
             others = meter.other_processes()
-            e0, t0 = meter.read()
+            e0, t0 = meter.read(sync=sync)
             for _ in range(N):
                 fn()
-            e1, t1 = meter.read()
+            e1, t1 = meter.read(sync=sync)
             yield {
                 "trial": trial,
                 "N": N,
