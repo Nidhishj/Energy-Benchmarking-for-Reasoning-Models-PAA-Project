@@ -83,6 +83,7 @@ def probe(model, tok, cache, probe_ids: torch.Tensor, think_pos: int, max_answer
     return rec, hidden
 
 
+@torch.inference_mode()  # the prefill too: with autograd on, each trace's activations stayed alive (OOM at 20k)
 def main():
     a = parse_args()
     if not torch.cuda.is_available():
