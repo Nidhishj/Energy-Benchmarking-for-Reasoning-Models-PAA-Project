@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "run_id": "20261127-090003_Live_trace_I7_t0_inplace_gpu0_bf573b6f",
+  "session_id": "20261127-090003_server_gpu0",
+  "experiment": "Live_trace_I7_t0_inplace",
+  "git_commit": "b40e2b4",
+  "git_dirty": true,
+  "command": "/data/cs3406/team02/envs/energy/bin/python expa/run_live_trace.py --source results/runs/B2b_aime/20261117-000045_B2b_aime_gpu1_725358c0 --problem aime2025/I-7 --trial 0 --cache inplace --tag I7_t0_inplace",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "source_run": "20261117-000045_B2b_aime_gpu1_725358c0",
+    "problem_id": "aime2025/I-7",
+    "trace_mode": "on",
+    "trace_trial": 0,
+    "prompt_len": 166,
+    "end": 20117,
+    "window": 512,
+    "cache": "inplace",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "batch_size": 1,
+    "method": "teacher-forced decode, one forward per token, logits_to_keep=1; synced reads per window"
+  },
+  "config_hash": "bf573b6f",
+  "status": "complete",
+  "started": "20261127-090003",
+  "finished": "20261127-090544"
+}

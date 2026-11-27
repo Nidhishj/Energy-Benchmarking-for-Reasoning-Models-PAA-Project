@@ -77,10 +77,11 @@
     ]
   },
   "config_hash": "98bf22f5",
-  "status": "stopped",
+  "status": "complete",
   "started": "20261118-093151",
   "resumed_in_sessions": [
-    "20261118-112454_server_gpu0"
+    "20261118-112454_server_gpu0",
+    "20261127-060517_server_gpu0"
   ],
-  "finished": "20261118-114002"
+  "finished": "20261127-061018"
 }

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "run_id": "20261127-083833_Probe_signals_gpu0_4044c1cd",
+  "session_id": "20261127-083833_server_gpu0",
+  "experiment": "Probe_signals",
+  "git_commit": "b40e2b4",
+  "git_dirty": true,
+  "command": "/data/cs3406/team02/envs/energy/bin/python expc/run_probe_signals.py --source results/runs/B2b_aime/20261117-000045_B2b_aime_gpu1_725358c0 results/runs/B2b_aime/20261117-000045_B2b_aime_gpu0_4d9566a3 --stop-at 11:45",
+  "cwd": "/data/cs3406/team02/Energy-Benchmarking-for-Reasoning-Models-PAA-Project",
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "local_path": "models/Qwen--Qwen3-8B",
+    "revision": null,
+    "class": "Qwen3ForCausalLM",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "n_layers": 36
+  },
+  "config": {
+    "sources": [
+      "results/runs/B2b_aime/20261117-000045_B2b_aime_gpu1_725358c0",
+      "results/runs/B2b_aime/20261117-000045_B2b_aime_gpu0_4d9566a3"
+    ],
+    "every": 1024,
+    "probe_text": "\n</think>\n\nThe final answer is \\boxed{",
+    "probe_ids": [
+      198,
+      151668,
+      271,
+      785,
+      1590,
+      4226,
+      374,
+      1124,
+      79075,
+      90
+    ],
+    "max_answer": 24,
+    "decoding": "greedy",
+    "dtype": "bf16",
+    "attn_impl": "sdpa",
+    "limit": null
+  },
+  "config_hash": "4044c1cd",
+  "status": "complete",
+  "started": "20261127-083833",
+  "finished": "20261127-095423",
+  "resumed_in_sessions": [
+    "20261127-094719_server_gpu0"
+  ]
+}
